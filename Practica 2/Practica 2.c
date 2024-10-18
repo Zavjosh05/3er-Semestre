@@ -27,80 +27,81 @@ void Intercambia(int*,int,int);
 int pivote(int*,int,int);
 
 int main() {
-    int opcion, n, *A;
+    int opcion, n ,nArray, i, *A;
+    double time_spent = 0.0;
+    int op[] = {100,1000,5000,7000,10000,30000,50000,75000,100000,143000,175000,200000,240000,300000,320000,385000,400000,415000,470000,500000};
+
+    nArray = sizeof(op)/sizeof(int);
 
     printf("Introduce que metodo de ordenamiento quieres:\n1.BubbleSort\n2.QuickSort\n3,Insertion\n4.Selection\n5.ShellSort\n6.TreeSort\n");
     scanf("%d", &opcion);
 
     clock_t beginT;
 
-    double time_spent = 0.0;
-    do
+    for(i = 0; i < nArray; i++)
     {
-        printf("Cuantos va a ordenar maistro?\n");
-        scanf("%d", &n);
+        beginT = clock();
+        n = op[i];
+        printf("n = %d\n",n);
+        clock_t begin = clock();
+        A = construyeArreglo(n,"numeros10millones.txt");
+        clock_t end = clock();
+
+        time_spent = (double) (end - begin);
+        //printf("Numero de ciclos para lectura: %f\n", time_spent);
+        printf("Tiempo de lectura: %.3f seconds\n", time_spent / CLOCKS_PER_SEC);
+        time_spent = 0.0;
+
+
+        switch(opcion)
+        {
+        case 1:
+            begin = clock();
+            BubbleSort(A, n);
+            end = clock();
+            break;
+        case 2:
+            begin = clock();
+            QuickSort(A,0,n-1);
+            end = clock();
+            break;
+        case 3:
+            begin = clock();
+            Insertion(A,n);
+            end = clock();
+            break;
+        case 4:
+            begin = clock();
+            Selection(A,n);
+            end = clock();
+            break;
+        case 5:
+            begin = clock();
+            shellSort(A,n);
+            end = clock();
+            break;
+        case 6:
+            begin = clock();
+            treeSort(A,n);
+            end = clock();
+            break;
+        default:
+            printf("\nOpcion no valida\n");
+            exit(0);
+        }
+
+        time_spent =  ((double)end - (double)begin);
+        //printf("Numero de ciclos realizados: %f\n", time_spent);
+        printf("Tiempo tomado del sort: %.3f segundos\n", time_spent / CLOCKS_PER_SEC);
+        time_spent = 0.0;
+
+        free(A);
+
+        clock_t endT = clock();
+        time_spent =  ((double)endT - (double)beginT);
+        //printf("Numero de ciclos totales del programa: %f\n", time_spent);
+        printf("Tiempo total del programa: %.3f segundos\n\n", time_spent / CLOCKS_PER_SEC);
     }
-    while(n > 500000 || n <= 0);
-
-    beginT = clock();
-    clock_t begin = clock();
-    A = construyeArreglo(n,"numeros10millones.txt");
-    clock_t end = clock();
-
-    time_spent = (double) (end - begin);
-    printf("Numero de ciclos para lectura: %f\n", time_spent);
-    printf("Tiempo de lectura: %f seconds\n\n", time_spent / CLOCKS_PER_SEC);
-    time_spent = 0.0;
-
-
-    switch(opcion)
-    {
-      case 1:
-        begin = clock();
-        BubbleSort(A, n);
-        end = clock();
-        break;
-      case 2:
-        begin = clock();
-        QuickSort(A,0,n-1);
-        end = clock();
-        break;
-      case 3:
-        begin = clock();
-        Insertion(A,n);
-        end = clock();
-        break;
-      case 4:
-        begin = clock();
-        Selection(A,n);
-        end = clock();
-        break;
-      case 5:
-        begin = clock();
-        shellSort(A,n);
-        end = clock();
-        break;
-      case 6:
-        begin = clock();
-        treeSort(A,n);
-        end = clock();
-        break;
-      default:
-        printf("\nOpcion no valida\n");
-        exit(0);
-    }
-
-    time_spent =  ((double)end - (double)begin);
-    printf("Numero de ciclos realizados: %f\n", time_spent);
-    printf("Tiempo tomado: %f segundos\n\n", time_spent / CLOCKS_PER_SEC);
-    time_spent = 0.0;
-
-    free(A);
-
-    clock_t endT = clock();
-    time_spent =  ((double)endT - (double)beginT);
-    printf("Numero de ciclos totales del programa: %f\n", time_spent);
-    printf("Tiempo total del programa: %f segundos\n", time_spent / CLOCKS_PER_SEC);
 
     return 0;
 
