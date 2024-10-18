@@ -27,17 +27,12 @@ void Intercambia(int*,int,int);
 int pivote(int*,int,int);
 
 int main() {
-
-    int opcion;
-
-
+    int opcion, n, *A;
 
     printf("Introduce que metodo de ordenamiento quieres:\n1.BubbleSort\n2.QuickSort\n3,Insertion\n4.Selection\n5.ShellSort\n6.TreeSort\n");
     scanf("%d", &opcion);
 
     clock_t beginT;
-    int *A;
-    int n;
 
     double time_spent = 0.0;
     do
@@ -47,10 +42,7 @@ int main() {
     }
     while(n > 500000 || n <= 0);
 
-
-
-
-
+    beginT = clock();
     clock_t begin = clock();
     A = construyeArreglo(n,"numeros10millones.txt");
     clock_t end = clock();
@@ -64,37 +56,31 @@ int main() {
     switch(opcion)
     {
       case 1:
-        beginT = clock();
         begin = clock();
         BubbleSort(A, n);
         end = clock();
         break;
       case 2:
-        beginT = clock();
         begin = clock();
         QuickSort(A,0,n-1);
         end = clock();
         break;
       case 3:
-        beginT = clock();
         begin = clock();
         Insertion(A,n);
         end = clock();
         break;
       case 4:
-        beginT = clock();
         begin = clock();
         Selection(A,n);
         end = clock();
         break;
       case 5:
-        beginT = clock();
         begin = clock();
         shellSort(A,n);
         end = clock();
         break;
       case 6:
-        beginT = clock();
         begin = clock();
         treeSort(A,n);
         end = clock();
@@ -104,17 +90,17 @@ int main() {
         exit(0);
     }
 
-    time_spent = (double) (end - begin);
-    printf("Numero de ciclos para ShellSort: %f\n", time_spent);
-    printf("Tiempo de ShellSort: %f seconds\n\n", time_spent / CLOCKS_PER_SEC);
+    time_spent =  ((double)end - (double)begin);
+    printf("Numero de ciclos realizados: %f\n", time_spent);
+    printf("Tiempo tomado: %f segundos\n\n", time_spent / CLOCKS_PER_SEC);
     time_spent = 0.0;
 
     free(A);
 
     clock_t endT = clock();
-    time_spent = (double) (endT - beginT);
+    time_spent =  ((double)endT - (double)beginT);
     printf("Numero de ciclos totales del programa: %f\n", time_spent);
-    printf("Tiempo total del programa: %f seconds\n", time_spent / CLOCKS_PER_SEC);
+    printf("Tiempo total del programa: %f segundos\n", time_spent / CLOCKS_PER_SEC);
 
     return 0;
 
