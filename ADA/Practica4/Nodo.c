@@ -53,9 +53,9 @@ void imprimirNodo(Nodo node)
     printf("Nodo nulo\n");
   else
   {
-    printf("Nodo:\n\tnombre = %c\nAristas en las que participa:\n", node->nombre);
+    printf("Nodo: nombre = %c\nAristas en las que participa:\n", node->nombre);
     for(int i = 0; i < node->numAristas; i++)
-      printf("\tArista: %p\n\t\tvalor: %d\n\t\tConectado con el nodo: %p",
+      printf("\tArista: %p\n\t\tvalor: %d\n\t\tConectado con el nodo: %p\n",
              node->aristas[i], node->aristas[i]->valor,(node->aristas[i]->n1 == node)?(node->aristas[i]->n2):(node->aristas[i]->n1));
   }
 }
@@ -65,32 +65,30 @@ void checarNodoPrimerizo(Nodo node)
 {
 	if(node->numAristas == 0)
           nodoPrimerizo(node);
-    else
-    {
-      node->numAristas += 1;
-      Arista *temp = (Arista*)realloc(node->aristas, sizeof(Arista) * node->numAristas);
-      if(temp == NULL) printf("No se encontra el arista\n");
-      node->aristas = temp;
+  else
+  {
+    node->numAristas += 1;
+    node->aristas = (Arista*)realloc(node->aristas, sizeof(Arista) * node->numAristas);
 //      crearArista(node->aristas +  node->numAristas - 1);
-    }
+  }
 }
 
 //Funcion para unir dos nodos
-int unirNodos(Nodo a, Nodo b)
-{
-    Arista aris;
-    crearArista(&aris);
-    checarNodoPrimerizo(a);
-    checarNodoPrimerizo(b);
-    aris->n1 = a;
-    aris->n2 = b;
-    a->aristas[a->numAristas-1] = aris;
-    b->aristas[a->numAristas-1] = aris;
-    asignarValorDeAristaPorUsuario(aris);
-    if(aris->n1 == NULL || aris->n2 == NULL)
-      return 0;
-    return 1;
-}
+//int unirNodos(Nodo a, Nodo b)
+//{
+//    Arista aris;
+//    crearArista(&aris);
+//    checarNodoPrimerizo(a);
+//    checarNodoPrimerizo(b);
+//    aris->n1 = a;
+//    aris->n2 = b;
+//    a->aristas[a->numAristas-1] = aris;
+//    b->aristas[a->numAristas-1] = aris;
+//    asignarValorDeAristaPorUsuario(aris);
+//    if(aris->n1 == NULL || aris->n2 == NULL)
+//      return 0;
+//    return 1;
+//}
 
 int unirNodosConValorDeArista(Nodo a, Nodo b, int val)
 {
@@ -101,7 +99,7 @@ int unirNodosConValorDeArista(Nodo a, Nodo b, int val)
     aris->n1 = a;
     aris->n2 = b;
     a->aristas[a->numAristas-1] = aris;
-    b->aristas[a->numAristas-1] = aris;
+    b->aristas[b->numAristas-1] = aris;
     asignarValorDeArista(aris, val);
     if(aris->n1 == NULL || aris->n2 == NULL)
       return 0;
