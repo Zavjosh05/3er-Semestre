@@ -61,6 +61,7 @@ void nodoTarea()
   imprimirNodo(n7);
   imprimirNodo(n8);
   imprimirNodo(n9);
+  imprimirGrafo(n1,arrNode, &nNode, arrArista, &nArista,0);
 }
 
 void nodoPrueba()
@@ -109,5 +110,5 @@ void nodoPrueba()
   imprimirNodo(n7);
   imprimirNodo(n8);
   puts("imprimir grafo");
-  imprimirGrafo(n1,arrNode, &nNode, arrArista, &nArista);
+  imprimirGrafo(n1,arrNode, &nNode, arrArista, &nArista,0);
 }

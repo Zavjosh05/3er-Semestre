@@ -23,6 +23,8 @@ int unirNodosConValorDeArista(Nodo,Nodo,int);
 int busquedaLinealNodo(Nodo,Nodo*,int);
 void checarNodoPrimerizo(Nodo);
 void imprimirNodo(Nodo);
-void imprimirGrafo(Nodo,Nodo*,int*,Arista*,int*);
+int imprimirArregloDeNodos(Nodo*,int);
+void imprimirGrafo(Nodo,Nodo*,int*,Arista*,int*,int);
+int imprimirArregloDeArista2(Arista*,int);
 
 #endif //NODO_H

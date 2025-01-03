@@ -65,6 +65,17 @@ int busquedaLinealArista(Arista aris, Arista *arrArista, int arrNum)
   return 0;
 }
 
+int imprimirArregloDeArista(Arista *arr, int arrNum)
+{
+  if(arr == NULL || arrNum <= 0)
+    return 0;
+
+  int i;
+
+  for(i = 0; i < arrNum; i++)
+    imprimirArista(arr[i]);
+}
+
 void eliminarArista(Arista aris)
 {
   if(aris == NULL)
