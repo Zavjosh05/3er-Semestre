@@ -4,21 +4,30 @@
 #include "Arista.h"
 
 void nodoPrueba();
-void nodoTarea();
+Nodo nodoTarea();
 
 int main(void)
 {
+  Nodo n1, *arrNode = NULL, **arrNodePtr = &arrNode;
+  Arista *arrArista = NULL, **arrAristaPtr = &arrArista;
+  int nNode = 0, nArista = 0;
 
-  nodoTarea();
+  n1  =  nodoTarea();
+
+  puts("imprimir grafo\n\n\n");
+  imprimirGrafo(n1,arrNodePtr, &nNode, arrAristaPtr, &nArista);
+  printf("numero de nodos: %d, numero de aristas: %d\n",nNode,nArista);
+  printf("Lista de Nodos\n");
+  imprimirArregloDeNodos2(*arrNodePtr,nNode);
+  printf("Lista de Aristas:\n");
+  imprimirArregloDeArista2(*arrAristaPtr,nArista);
 
   return 0;
 }
 
-void nodoTarea()
+Nodo nodoTarea()
 {
-  Nodo n1, n2, n3, n4, n5, n6, n7, n8, n9, *arrNode = NULL, **arrNodePtr = &arrNode;
-  Arista *arrArista = NULL, **arrAristaPtr = &arrArista;
-  int nNode = 0, nArista = 0;
+  Nodo n1, n2, n3, n4, n5, n6, n7, n8, n9;
 
   crearNodo(&n1);
   crearNodo(&n2);
@@ -61,12 +70,8 @@ void nodoTarea()
   imprimirNodo(n7);
   imprimirNodo(n8);
   imprimirNodo(n9);
-  puts("imprimir grafo\n\n\n");
-  imprimirGrafo(n1,arrNodePtr, &nNode, arrAristaPtr, &nArista);
-  printf("numero de nodos: %d, numero de aristas: %d\n",nNode,nArista);
-  printf("jl;jlj;\n");
-  imprimirArregloDeNodos2(*arrNodePtr,nNode);
-  imprimirArregloDeArista2(*arrAristaPtr,nArista);
+
+  return n1;
 }
 
 void nodoPrueba()
