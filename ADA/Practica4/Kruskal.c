@@ -17,10 +17,12 @@ int main(void)
   puts("imprimir grafo\n\n\n");
   imprimirGrafo(n1,arrNodePtr, &nNode, arrAristaPtr, &nArista);
   printf("numero de nodos: %d, numero de aristas: %d\n",nNode,nArista);
+  arrNode = *arrNodePtr;
+  arrArista = *arrAristaPtr;
   printf("Lista de Nodos\n");
-  imprimirArregloDeNodos2(*arrNodePtr,nNode);
+  imprimirArregloDeNodos2(arrNode,nNode);
   printf("Lista de Aristas:\n");
-  imprimirArregloDeArista2(*arrAristaPtr,nArista);
+  imprimirArregloDeArista2(arrArista,nArista);
 
   return 0;
 }
