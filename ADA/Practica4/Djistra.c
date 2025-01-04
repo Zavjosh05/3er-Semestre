@@ -6,9 +6,10 @@
 void algoritmo(Nodo * listaNodos, Arista * listaAristas, int tamListaNodos, int tamListaAristas);
 int comprobarNodoExiste(Nodo * listaNodos, char nodoABuscar, int tamListaNodos);
 int mostrarPosicionEnArray(Nodo * listaNodos, char nodoABuscar, int tamListaNodos);
-int rutaPorPesoPequeno(Nodo * listaNodos, Arista * listaAristas, int tamListaNodos, int tamListaAristas, char nodoIncial, char nodoFinal);
+int rutaPorPesoPequeno(Nodo node, char nodoFinal, Nodo * listaNodosRecorridos, int * tamListaNodosRecorridos);
 void acomodarAristasDeNodos(Nodo * listaNodos, int tamListaNodos);
 void acomodarAristasDeNodo(Nodo node);
+Nodo * agregarNodoAListaNodosRecorrido(Nodo * listaNodosRecorrido, Nodo nodoAAgregar, int * tamListaNodosRecorrido);
 Nodo nodoTarea();
 
 int main(void)
@@ -86,6 +87,7 @@ Nodo nodoTarea()
 void algoritmo(Nodo * listaNodos, Arista * listaAristas, int tamListaNodos, int tamListaAristas)
 {
   char nodoInicial, nodoFinal;
+  int tamListaNodosRecorridos = 1;
   do
   {
     printf("Ingresa el nodo incial\n");
@@ -101,6 +103,11 @@ void algoritmo(Nodo * listaNodos, Arista * listaAristas, int tamListaNodos, int 
   int posicionNodoInicial = mostrarPosicionEnArray(listaNodos, nodoInicial, tamListaNodos);
   acomodarAristasDeNodos(listaNodos, tamListaNodos);
   imprimirArregloDeNodos(listaNodos, tamListaNodos);
+  Nodo * listaNodosRecorridos = (Nodo *) malloc(sizeof(Nodo));
+  if(listaNodosRecorridos == NULL)
+    exit(-1);
+  listaNodosRecorridos[0] = listaNodos[posicionNodoInicial];
+  rutaPorPesoPequeno(listaNodos[posicionNodoInicial], nodoFinal, listaNodosRecorridos, &tamListaNodosRecorridos);
 }
 
 int comprobarNodoExiste(Nodo * listaNodos, char nodoABuscar, int tamListaNodos)
@@ -117,10 +124,11 @@ int comprobarNodoExiste(Nodo * listaNodos, char nodoABuscar, int tamListaNodos)
   return 0;
 }
 
-int rutaPorPesoPequeno(Nodo * listaNodos, Arista * listaAristas, int tamListaNodos, int tamListaAristas, char nodoIncial, char nodoFinal)
+int rutaPorPesoPequeno(Nodo node, char nodoFinal, Nodo * listaNodosRecorridos, int * tamListaNodosRecorridos)
 {
-  x
+
 }
+
 
 int mostrarPosicionEnArray(Nodo * listaNodos, char nodoABuscar, int tamListaNodos)
 {
@@ -153,4 +161,14 @@ void acomodarAristasDeNodo(Nodo node)
       	break;
     }
   }
+}
+
+Nodo * agregarNodoAListaNodosRecorrido(Nodo * listaNodosRecorrido, Nodo nodoAAgregar, int * tamListaNodosRecorrido)
+{
+  *tamListaNodosRecorrido++;
+  listaNodosRecorrido = (Nodo *) realloc(listaNodosRecorrido, sizeof(Nodo) * (*tamListaNodosRecorrido));
+  if(listaNodosRecorrido == NULL)
+    exit(-1);
+  listaNodosRecorrido[*tamListaNodosRecorrido - 1] = nodoAAgregar;
+  return listaNodosRecorrido;
 }
