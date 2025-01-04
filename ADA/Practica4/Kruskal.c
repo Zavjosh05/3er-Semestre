@@ -16,8 +16,8 @@ int main(void)
 
 void nodoTarea()
 {
-  Nodo n1, n2, n3, n4, n5, n6, n7, n8, n9, *arrNode = NULL;
-  Arista *arrArista = NULL;
+  Nodo n1, n2, n3, n4, n5, n6, n7, n8, n9, *arrNode = NULL, **arrNodePtr = &arrNode;
+  Arista *arrArista = NULL, **arrAristaPtr = &arrArista;
   int nNode = 0, nArista = 0;
 
   crearNodo(&n1);
@@ -61,7 +61,12 @@ void nodoTarea()
   imprimirNodo(n7);
   imprimirNodo(n8);
   imprimirNodo(n9);
-  imprimirGrafo(n1,arrNode, &nNode, arrArista, &nArista,0);
+  puts("imprimir grafo\n\n\n");
+  imprimirGrafo(n1,arrNodePtr, &nNode, arrAristaPtr, &nArista);
+  printf("numero de nodos: %d, numero de aristas: %d\n",nNode,nArista);
+  printf("jl;jlj;\n");
+  imprimirArregloDeNodos2(*arrNodePtr,nNode);
+  imprimirArregloDeArista2(*arrAristaPtr,nArista);
 }
 
 void nodoPrueba()
@@ -109,6 +114,5 @@ void nodoPrueba()
   imprimirNodo(n6);
   imprimirNodo(n7);
   imprimirNodo(n8);
-  puts("imprimir grafo");
-  imprimirGrafo(n1,arrNode, &nNode, arrArista, &nArista,0);
+  imprimirGrafo(n1,arrNode, &nNode, &arrArista, &nArista);
 }

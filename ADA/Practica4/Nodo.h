@@ -24,7 +24,8 @@ int busquedaLinealNodo(Nodo,Nodo*,int);
 void checarNodoPrimerizo(Nodo);
 void imprimirNodo(Nodo);
 int imprimirArregloDeNodos(Nodo*,int);
-void imprimirGrafo(Nodo,Nodo*,int*,Arista*,int*,int);
+int imprimirArregloDeNodos2(Nodo*,int);
+void imprimirGrafo(Nodo,Nodo**,int*,Arista**,int*);
 int imprimirArregloDeArista2(Arista*,int);
 
 #endif //NODO_H

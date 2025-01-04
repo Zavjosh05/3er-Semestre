@@ -126,7 +126,7 @@ int busquedaLinealNodo(Nodo node, Nodo *arr, int numNodos)
   return 0;
 }
 
-void imprimirGrafo(Nodo node, Nodo *arrNode, int *numNodos, Arista *arrArista, int *numAristas, int ii)
+void imprimirGrafo(Nodo node, Nodo **arrNode, int *numNodos, Arista **arrArista, int *numAristas)
 {
   if(node == NULL)
   {
@@ -134,50 +134,48 @@ void imprimirGrafo(Nodo node, Nodo *arrNode, int *numNodos, Arista *arrArista, i
   	return;
   }
 
-  int i,j;
+  int i;
   Nodo temp;
-
-  //printf("\n numero de Nodos: %d\n", *numNodos);
 
   if(*numNodos  == 0)
   {
     *numNodos += 1;
-    arrNode = (Nodo*)calloc(1, sizeof(Nodo));
-    *arrNode = node;
+    *arrNode = (Nodo*)calloc(1, sizeof(Nodo));
+    (*arrNode)[0] = node;
   }
   else
   {
     *numNodos += 1;
-    arrNode = (Nodo*)realloc(arrNode, sizeof(Nodo) * *numNodos);
-    arrNode[*numNodos-1] = node;
+    *arrNode = (Nodo*)realloc(*arrNode, sizeof(Nodo) * *numNodos);
+    (*arrNode)[*numNodos-1] = node;
   }
 
   imprimirNodo(node);
   if(*numAristas  ==  0)
   {
     *numAristas += 1;
-    arrArista = (Arista*)calloc(1, sizeof(Arista));
-    *arrArista = node->aristas[0];
+    *arrArista = (Arista*)calloc(1, sizeof(Arista));
+    (*arrArista)[0] = node->aristas[0];
     temp = (node->aristas[0]->n1 == node)?(node->aristas[0]->n2):(node->aristas[0]->n1);
-      //if(!busquedaLinealNodo(temp, arrNode, *numNodos))
-        imprimirGrafo(temp, arrNode, numNodos, arrArista, numAristas, i + 1);
+    imprimirGrafo(temp, arrNode, numNodos, arrArista, numAristas);
     i = 1;
   }
   else i = 0;
   for(; i < node->numAristas; i++)
   {
-    for(j =  0; j < ii; j++)
-      putchar('\t');
-   	printf("i: %d, nAris: %d\n",i,node->numAristas);
-    //imprimirArregloDeArista2(arrArista, *numAristas);
-    if(!busquedaLinealArista(node->aristas[i], arrArista, *numAristas))
+//    printf("i: %d, nAris: %d\n",i,node->numAristas);
+//    printf("num: aristas: %d\n",*numAristas);
+//    printf("arista: %p, valor: %d, nodo1: %c, nodo2: %c\n",node->aristas[i], node->aristas[i]->valor,node->aristas[i]->n1->nombre,node->aristas[i]->n2->nombre);
+//    printf("arrArista: %p\n",*arrArista);
+    //imprimirArregloDeArista2(*arrArista, *numAristas);
+    if(!busquedaLinealArista(node->aristas[i], *arrArista, *numAristas))
     {
       *numAristas += 1;
-      arrArista = (Arista*)realloc(arrArista, sizeof(Arista) * *numAristas);
-      arrArista[*numAristas-1] = node->aristas[i];
+      *arrArista = (Arista*)realloc(*arrArista, sizeof(Arista) * *numAristas);
+      (*arrArista)[*numAristas-1] = node->aristas[i];
       temp = (node->aristas[i]->n1 == node)?(node->aristas[i]->n2):(node->aristas[i]->n1);
-      if(!busquedaLinealNodo(temp, arrNode, *numNodos))
-        imprimirGrafo(temp, arrNode, numNodos, arrArista, numAristas,i+1);
+      if(!busquedaLinealNodo(temp, *arrNode, *numNodos))
+        imprimirGrafo(temp, arrNode, numNodos, arrArista, numAristas);
     }
   }
 }
@@ -195,6 +193,19 @@ int imprimirArregloDeNodos(Nodo *arrNode, int numNodos)
   return 1;
 }
 
+int imprimirArregloDeNodos2(Nodo *arrNode, int numNodos)
+{
+  if(numNodos == 0)
+    return 0;
+
+  int i;
+
+  for(i = 0; i < numNodos; i++)
+    printf("Nodo: %c\n", arrNode[i]->nombre);
+
+  return 1;
+}
+
 int imprimirArregloDeArista2(Arista *arr, int arrNum)
 {
   if(arr == NULL || arrNum <= 0)
@@ -203,7 +214,7 @@ int imprimirArregloDeArista2(Arista *arr, int arrNum)
   int i;
 
   for(i = 0; i < arrNum; i++)
-    imprimirArista2(arr[i]);
+    printf("Arista: %d, %p\n",arr[i]->valor,arr[i]);
 
   return 1;
 }
