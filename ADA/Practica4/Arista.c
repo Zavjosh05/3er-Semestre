@@ -74,6 +74,8 @@ int imprimirArregloDeArista(Arista *arr, int arrNum)
 
   for(i = 0; i < arrNum; i++)
     imprimirArista(arr[i]);
+
+  return 1;
 }
 
 void eliminarArista(Arista aris)
