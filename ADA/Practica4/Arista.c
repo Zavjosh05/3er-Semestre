@@ -78,6 +78,38 @@ int imprimirArregloDeArista(Arista *arr, int arrNum)
   return 1;
 }
 
+void ordenarArregloDeAristas(Arista *arr, int arrNum)
+{
+  if(arr == NULL || arrNum <= 0)
+    return;
+
+  int i,  j, gap;
+  Arista temp;
+
+  for (gap = arrNum / 2; gap > 0; gap /= 2)
+        for (i = gap; i < arrNum; i++) {
+            temp = arr[i];
+            for (j = i; j >= gap && arr[j - gap]->valor > temp->valor; j -= gap)
+                arr[j] = arr[j - gap];
+            arr[j] = temp;
+        }
+}
+
+void shellSort(int arr[], int n) {
+    // Comenzamos con un gran intervalo, luego lo reducimos
+    for (int gap = n / 2; gap > 0; gap /= 2) {
+        // Realizamos un ordenamiento por inserción para este intervalo
+        for (int i = gap; i < n; i++) {
+            int temp = arr[i];
+            int j;
+            for (j = i; j >= gap && arr[j - gap] > temp; j -= gap) {
+                arr[j] = arr[j - gap];
+            }
+            arr[j] = temp;
+        }
+    }
+}
+
 void eliminarArista(Arista aris)
 {
   if(aris == NULL)

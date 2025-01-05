@@ -129,28 +129,3 @@ int mostrarPosicionEnArray(Nodo * listaNodos, char nodoABuscar, int tamListaNodo
       return i;
   return 0;
 }
-void acomodarAristasDeNodos(Nodo * listaNodos, int tamListaNodos)
-{
-  for(int i = 0; i < tamListaNodos; i++)
-    acomodarAristasDeNodo(listaNodos[i]);
-}
-
-void acomodarAristasDeNodo(Nodo node)
-{
-  for(int i = 1; i < node->numAristas; i++)
-  {
-    int posTemp = i;
-    for(int j = posTemp - 1; j >= 0 ; j--)
-    {
-      if(node->aristas[posTemp]->valor < node->aristas[j]->valor)
-      {
-        Arista temp = node->aristas[j];
-        node->aristas[j] = node->aristas[posTemp];
-        node->aristas[posTemp] = temp;
-        posTemp = j;
-      }
-      else
-      	break;
-    }
-  }
-}
