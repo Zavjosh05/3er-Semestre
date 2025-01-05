@@ -214,7 +214,7 @@ int imprimirArregloDeArista2(Arista *arr, int arrNum)
   int i;
 
   for(i = 0; i < arrNum; i++)
-    printf("Arista: %d, %p\n",arr[i]->valor,arr[i]);
+    printf("Arista: %d, nodo1: %c ,nodo2: %c\n",arr[i]->valor,arr[i]->n1->nombre,arr[i]->n2->nombre);
 
   return 1;
 }
