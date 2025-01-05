@@ -20,5 +20,6 @@ void asignarValorDeArista(Arista,int);
 int busquedaLinealArista(Arista,Arista*,int);
 void eliminarArista(Arista);
 int imprimirArregloDeArista(Arista*,int);
+void ordenarArregloDeAristas(Arista*,int);
 
 #endif //ARISTA_H

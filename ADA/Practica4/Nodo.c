@@ -150,7 +150,7 @@ void imprimirGrafo(Nodo node, Nodo **arrNode, int *numNodos, Arista **arrArista,
     (*arrNode)[*numNodos-1] = node;
   }
 
-  imprimirNodo(node);
+  //imprimirNodo(node);
   if(*numAristas  ==  0)
   {
     *numAristas += 1;
@@ -241,3 +241,47 @@ void eliminarGrafo(Nodo *arrNode, int numNode, Arista *arrArista, int numArista)
   for(i = 0; i < numArista; i++)
     	eliminarArista(arrArista[i]);
 }
+
+void ordenarArregloDeNodos(Nodo *arr, int arrNum)
+{
+  if(arr == NULL || arrNum <= 0)
+    return;
+
+  int i,  j, gap;
+  Nodo temp;
+
+  for (gap = arrNum / 2; gap > 0; gap /= 2)
+        for (i = gap; i < arrNum; i++) {
+            temp = arr[i];
+            for (j = i; j >= gap && arr[j - gap]->nombre > temp->nombre; j -= gap)
+                arr[j] = arr[j - gap];
+            arr[j] = temp;
+        }
+}
+
+void acomodarAristasDeNodo(Nodo node)
+{
+  for(int i = 1; i < node->numAristas; i++)
+  {
+    int posTemp = i;
+    for(int j = posTemp - 1; j >= 0 ; j--)
+    {
+      if(node->aristas[posTemp]->valor < node->aristas[j]->valor)
+      {
+        Arista temp = node->aristas[j];
+        node->aristas[j] = node->aristas[posTemp];
+        node->aristas[posTemp] = temp;
+        posTemp = j;
+      }
+      else
+      	break;
+    }
+  }
+}
+
+void acomodarAristasDeNodos(Nodo * listaNodos, int tamListaNodos)
+{
+  for(int i = 0; i < tamListaNodos; i++)
+    acomodarAristasDeNodo(listaNodos[i]);
+}
+
