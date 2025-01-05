@@ -156,7 +156,7 @@ void procesoKruskal(Nodo inicial,Nodo final ,Nodo *arrNode, int numNode, Arista 
       }
       i++;
     }
-    printf("Numero de por los que se pasa: %d\n", numTrazo);
+    printf("Numero de nodos por los que se pasa: %d\n", numTrazo);
     imprimirArregloDeNodos2(trazo,numTrazo);
     printf("Costo total: %d\n", calculoDeCosto(trazo, numTrazo));
 
