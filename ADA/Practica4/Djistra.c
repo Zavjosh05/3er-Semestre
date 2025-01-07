@@ -109,8 +109,6 @@ void algoritmo(Nodo * listaNodos, Arista * listaAristas, int tamListaNodos, int 
 
   acomodarAristasDeNodos(listaNodos, tamListaNodos);
 
-  imprimirArregloDeNodos(listaNodos, tamListaNodos);
-
   Nodo * listaNodosRecorridos = (Nodo *) malloc(sizeof(Nodo));
   Nodo * listaNodosRecorridos2 = (Nodo *) malloc(sizeof(Nodo));
   Nodo * solucionListaNodosRecorridos = (Nodo *) malloc(sizeof(Nodo));
@@ -120,13 +118,15 @@ void algoritmo(Nodo * listaNodos, Arista * listaAristas, int tamListaNodos, int 
 
   rutaPorPesoPequeno(listaNodos[posicionNodoInicial], nodoFinal, &listaNodosRecorridos, &tamListaNodosRecorridos);
 
-  printf("\nResultado:\n");
+  printf("\nResultado voraz:\n");
   imprimirArregloDeNodos2(listaNodosRecorridos, tamListaNodosRecorridos);
+  printf("\nCon un peso de: %d\n", pesoDelResultado(listaNodosRecorridos, tamListaNodosRecorridos));
 
   printf("Inicia proceso exhaustivo");
   rutaPorPesoPequenoExhaustivo(listaNodos[posicionNodoInicial], nodoInicial, nodoFinal, &listaNodosRecorridos2, &tamListaNodosRecorridos2, &solucionListaNodosRecorridos, &pesoFinal, &tamsolucionListaNodosRecorridos);
   printf("\nResultado exhaustivo:\n");
   imprimirArregloDeNodos2(solucionListaNodosRecorridos, tamsolucionListaNodosRecorridos);
+  printf("\nCon un peso de: %d\n", pesoDelResultado(solucionListaNodosRecorridos, tamsolucionListaNodosRecorridos));
 }
 
 int comprobarNodoExiste(Nodo * listaNodos, char nodoABuscar, int tamListaNodos, int op)
@@ -174,31 +174,6 @@ int mostrarPosicionEnArray(Nodo * listaNodos, char nodoABuscar, int tamListaNodo
     if(listaNodos[i]->nombre == nodoABuscar)
       return i;
   return 0;
-}
-void acomodarAristasDeNodos(Nodo * listaNodos, int tamListaNodos)
-{
-  for(int i = 0; i < tamListaNodos; i++)
-    acomodarAristasDeNodo(listaNodos[i]);
-}
-
-void acomodarAristasDeNodo(Nodo node)
-{
-  for(int i = 1; i < node->numAristas; i++)
-  {
-    int posTemp = i;
-    for(int j = posTemp - 1; j >= 0 ; j--)
-    {
-      if(node->aristas[posTemp]->valor < node->aristas[j]->valor)
-      {
-        Arista temp = node->aristas[j];
-        node->aristas[j] = node->aristas[posTemp];
-        node->aristas[posTemp] = temp;
-        posTemp = j;
-      }
-      else
-      	break;
-    }
-  }
 }
 
 Nodo ** agregarNodoAListaNodosRecorrido(Nodo ** listaNodosRecorrido, Nodo nodoAAgregar, int * tamListaNodosRecorrido)
@@ -268,10 +243,12 @@ int pesoDelResultado(Nodo * listaNodosRecorridos, int tamListaNodosRecorridos)
   int peso = 0;
   for(int i = 0; i < tamListaNodosRecorridos - 1; i++)
   {
+
     for(int j = 0; j < listaNodosRecorridos[i]->numAristas; j++)
     {
       if(listaNodosRecorridos[i+1] == listaNodosRecorridos[i]->aristas[j]->n1 || listaNodosRecorridos[i+1] == listaNodosRecorridos[i]->aristas[j]->n2)
       {
+
         peso += listaNodosRecorridos[i]->aristas[j]->valor;
         break;
       }
