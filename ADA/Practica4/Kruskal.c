@@ -56,7 +56,6 @@ Nodo ingresarNodoParaKruskal(Nodo *arrNode, int numNode, int modo)
         puts("Ingresa el nombre del nodo inicio");
     else
         puts("Ingresa el nombre del nodo destino");
-
     do
     {
         fseek(stdin, 0, SEEK_END);
@@ -139,7 +138,7 @@ void procesoKruskal(Nodo inicial,Nodo final ,Nodo *arrNode, int numNode, Arista 
     Nodo *trazo;
     int numMemoria = 0,numTrazo = 0, *numTrazoPtr = &numTrazo , i, j, ind = 1;
 
-
+    acomodarAristasDeNodos(arrNode, numNode);
     i = 0;
     while(i < numArista && ind)
     {
@@ -157,6 +156,7 @@ void procesoKruskal(Nodo inicial,Nodo final ,Nodo *arrNode, int numNode, Arista 
       i++;
     }
     printf("Numero de nodos por los que se pasa: %d\n", numTrazo);
+    puts("Camino tomado:");
     imprimirArregloDeNodos2(trazo,numTrazo);
     printf("Costo total: %d\n", calculoDeCosto(trazo, numTrazo));
 
@@ -174,14 +174,16 @@ void algoritmoKruskal(Nodo grafo)
     printf("El grafo insertado cuenta con: %d nodos y %d aristas\n\n",nNode,nArista);
     ordenarArregloDeAristas(arrArista,nArista);
     ordenarArregloDeNodos(arrNode,nNode);
+    puts("Nodos:");
     imprimirArregloDeNodos2(arrNode,nNode);
+    puts("\nAristas:");
+    imprimirArregloDeArista2(arrArista,nArista);
     putchar('\n');
-    //imprimirArregloDeArista2(arrArista,nArista);
     do
     {
         inicial = ingresarNodoParaKruskal(arrNode,nNode,1);
         final = ingresarNodoParaKruskal(arrNode,nNode,0);
-        (inicial == final)?(puts("Los nodos no pueden ser iguales :v\ningrese nodos diferentes")):(puts("nodos registrados"));
+        (inicial == final)?(puts("Los nodos no pueden ser iguales :v\ningrese nodos diferentes")):(puts("nodos registrados\n"));
     }while(inicial == final);
 
     procesoKruskal(inicial,final,arrNode,nNode,arrArista,nArista);

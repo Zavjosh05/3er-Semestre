@@ -1,16 +1,47 @@
-//
-// Created by josh on 04/01/2025.
-//
+/*
+ *
+ */
 #include <stdio.h>
 #include"Nodo.h"
 #include"Arista.h"
 #include"Kruskal.h"
+#include"Djistra.h"
 
 Nodo nodoTarea();
 
 int main(void)
 {
-    algoritmoKruskal(nodoTarea());
+    Nodo grafo, *arrNode = NULL, **arrNodePtr = &arrNode, inicial, final;
+    Arista *arrArista = NULL, **arrAristaPtr = &arrArista;
+    int nNode = 0, nArista = 0;
+
+    grafo = nodoTarea();
+
+    imprimirGrafo(grafo,arrNodePtr, &nNode, arrAristaPtr, &nArista);
+    arrNode = *arrNodePtr;
+    arrArista = *arrAristaPtr;
+    printf("El grafo insertado cuenta con: %d nodos y %d aristas\n\n",nNode,nArista);
+    ordenarArregloDeAristas(arrArista,nArista);
+    ordenarArregloDeNodos(arrNode,nNode);
+    puts("Nodos:");
+    imprimirArregloDeNodos2(arrNode,nNode);
+    puts("\nAristas:");
+    imprimirArregloDeArista2(arrArista,nArista);
+    putchar('\n');
+
+    do
+    {
+        inicial = ingresarNodoParaKruskal(arrNode,nNode,1);
+        final = ingresarNodoParaKruskal(arrNode,nNode,0);
+        (inicial == final)?(puts("Los nodos no pueden ser iguales :v\ningrese nodos diferentes")):(puts("nodos registrados\n"));
+    }while(inicial == final);
+
+    puts("Kruskal:\n");
+    procesoKruskal(inicial,final,arrNode,nNode,arrArista,nArista);
+    puts("\nDijkstra:");
+    algoritmoDijistra(arrNode,arrArista,nNode,nArista,inicial->nombre,final->nombre);
+
+    eliminarGrafo(arrNode,nNode,arrArista,nArista);
 
     return 0;
 }

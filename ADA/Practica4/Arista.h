@@ -1,7 +1,3 @@
-//
-// Created by josh on 18/12/2024.
-//
-
 #ifndef ARISTA_H
 #define ARISTA_H
 

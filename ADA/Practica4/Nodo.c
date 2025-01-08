@@ -1,6 +1,3 @@
-//
-// Created by josh on 18/12/2024.
-//
 #include <stdio.h>
 #include <stdlib.h>
 #include "Nodo.h"
@@ -163,11 +160,6 @@ void imprimirGrafo(Nodo node, Nodo **arrNode, int *numNodos, Arista **arrArista,
   else i = 0;
   for(; i < node->numAristas; i++)
   {
-//    printf("i: %d, nAris: %d\n",i,node->numAristas);
-//    printf("num: aristas: %d\n",*numAristas);
-//    printf("arista: %p, valor: %d, nodo1: %c, nodo2: %c\n",node->aristas[i], node->aristas[i]->valor,node->aristas[i]->n1->nombre,node->aristas[i]->n2->nombre);
-//    printf("arrArista: %p\n",*arrArista);
-    //imprimirArregloDeArista2(*arrArista, *numAristas);
     if(!busquedaLinealArista(node->aristas[i], *arrArista, *numAristas))
     {
       *numAristas += 1;

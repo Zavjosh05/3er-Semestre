@@ -1,7 +1,3 @@
-//
-// Created by josh on 18/12/2024.
-//
-
 #ifndef NODO_H
 #define NODO_H
 

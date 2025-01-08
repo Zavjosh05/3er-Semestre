@@ -1,6 +1,3 @@
-//
-// Created by josh on 04/01/2025.
-//
 #ifndef KRUSKAL_H
 #define KRUSKAL_H
 
