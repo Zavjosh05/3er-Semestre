@@ -1,9 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef struct charact
+{
+    char elem;
+    int frecuencia;
+}*Charact;
+
 typedef struct nodo
 {
-    char elemento;
+    Charact elemento;
     struct nodo *izq, *der;
 }*Nodo;
 
