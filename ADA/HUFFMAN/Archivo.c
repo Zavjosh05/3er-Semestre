@@ -12,12 +12,12 @@ int numeroDeElementosEnArchivo(FILE *archivo)
     return i;
 }
 
-char* elementosDeArchivo(FILE *archivo, int numeroDeElementos)
+char* obtenerElementosDeArchivo(FILE *archivo, int numeroDeElementos)
 {
     unsinged char *elem;
     int c, i = 0;
 
-    elem = (char*)calloc(nuumeroDeElementos, sizeof(char));
+    elem = (char*)calloc(numeroDeElementos, sizeof(char));
 
     if(elem == NULL)
         return NULL;
