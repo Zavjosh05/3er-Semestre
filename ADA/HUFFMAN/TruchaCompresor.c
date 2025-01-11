@@ -2,12 +2,8 @@
 #include <commdlg.h>
 #include <stdio.h>
 #include <string.h>
-<<<<<<< HEAD
 int obtenerRuta(char ** rutaSinNombreArchivo, char ** nombreArchivo, char ** extension);
-=======
 #include "huffman.h"
-int obtenerRuta(char ** rutaSinNombreArchivo, char ** nombreArchivo);
->>>>>>> 9eff2484544895e4e95ab70ddd5cc5a977c90142
 
 /*
  * Debemos tener los siguientes argumentos -lgdi32 -lcomdlg32
