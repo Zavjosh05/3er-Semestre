@@ -12,19 +12,21 @@ int numeroDeElementosEnArchivo(FILE *archivo)
     return i;
 }
 
-char* obtenerElementosDeArchivo(FILE *archivo, int numeroDeElementos)
+char* obtenerElementosDeArchivo(FILE *archivo, int *numeroDeElementos)
 {
     unsinged char *elem;
-    int c, i = 0;
+    int c, j;
 
-    elem = (char*)calloc(numeroDeElementos, sizeof(char));
+    *numeroDeElementos = numeroDeElementosEnArchivo(archivo);
+
+    elem = (char*)calloc(*numeroDeElementos, sizeof(char));
 
     if(elem == NULL)
         return NULL;
 
     rewind(archivo);
-    while((c = fgetc(archivo)) != EOF)
-        elem[i++] = (unsinged char)c;
+    for(j = 0; j < *numeroDeElementos; j++)
+        elem[j] = fgetc(archivo);
 
     return elem;
 }
