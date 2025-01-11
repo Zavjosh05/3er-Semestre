@@ -7,7 +7,7 @@ Huffman
 	1.2 si el archivo tiene extencion .dat
 
 Caso de archivo diferente a .dat
-	1. Leer el archivo
+	1. Leer el archivo y guardar su contenido en un arreglo de caracteres
 	2. Realizar la tabla de frecuencias
 		2.1 guardar los caracteres y su frecuencia de aparicion (implementar con struct)
 			2.1.1 Leer al completo el archivo, registrando todos los caracteres unicos que tiene, registrado a la vez su frecuencia de aparicion
@@ -22,11 +22,11 @@ Caso de archivo diferente a .dat
 			2.2.6 Llegará el punto en que también solo se empiecen a unir nodos padre con nodos padre, aplicamos el paso 3 y 4 de nuevo.
 			2.2.7 Repetir el paso 6 hasta que solo nos quede un nodo padre, lo cual significara que completamos la construcción del arbol
 		2.3 Generar la tabla de equivalencias
-			2.3.1 Ordenar la cadena de structs de forma descendente
-			2.3.2 Crear un arreglo(caracteres) bidimencional para almacenar las cadenas de bits
-			2.3.3 Crear un arreglo(numerico) para almacenar el tamaño de estas cadenas de bits
-			2.3.4 Crear un arreglo(caracteres) para almacenar la cadena de bits del trayecto del arbol
-			2.3.5 Asignar el arreglo con la cadena de bits en el arreglo bidimencional con la posicion equivalente a la posicion de su respectivo caracter en el arreglo
-				de caracteres
+			2.3.1 Ordenar la cadena de structs de forma descendente con base a la frecuencia
+			2.3.2 Crear un arreglo(caracteres) para almacenar la cadena de bits del trayecto del arbol
+			2.3.3 Asignar la cadena de bits dentro del struct correspondiente
 	3. Codificar el archivo original
+	    3.1 convertir los caracters del arreglo del contenido del archivo a sus equivalentes en la tabla de equivalencia
 	4. Insertamos la tabla de frecuencias y archivo codificado con esta en archivo .dat
+	    4.1 Convertir la tabla de equivalencia en una cadena
+	    4.2 Insertar la codificacion de la tabla de frecuencia junto a la cadena de codificacion del contenido del archivo
