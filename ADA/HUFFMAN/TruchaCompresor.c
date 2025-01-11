@@ -4,9 +4,19 @@
 #include <string.h>
 int obtenerRuta(char ** rutaSinNombreArchivo, char ** nombreArchivo);
 
+/*
+ * Debemos tener los siguientes argumentos -lgdi32 -lcomdlg32
+ *
+ * */
+
 int main()
 {
+	char * rutaSinNombreArchivo;
+	char * nombreArchivo;
 
+	obtenerRuta(&rutaSinNombreArchivo, &nombreArchivo);
+
+	printf("La ruta es: %s%s\n", rutaSinNombreArchivo, nombreArchivo);
 }
 
 /**
