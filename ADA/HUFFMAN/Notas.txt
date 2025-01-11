@@ -29,4 +29,4 @@ Caso de archivo diferente a .dat
 	    3.1 convertir los caracters del arreglo del contenido del archivo a sus equivalentes en la tabla de equivalencia
 	4. Insertamos la tabla de frecuencias y archivo codificado con esta en archivo .dat
 	    4.1 Convertir la tabla de equivalencia en una cadena
-	    4.2 Insertar la codificacion de la tabla de frecuencia junto a la cadena de codificacion del contenido del archivo
+	    4.2 Insertar la codificacion de la tabla de frecuencia junto a la cadena codificada del contenido del archivo
