@@ -6,6 +6,7 @@
 int main(int argc, char **argv)
 {
     FILE *entrada, *salida, *frecuencias;
+    char *
 
     entrada = fopen(*++argv, "r");
     if (entrada == NULL)
