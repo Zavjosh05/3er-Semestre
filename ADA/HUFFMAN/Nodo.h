@@ -8,7 +8,10 @@ typedef struct nodo
 }*Nodo;
 
 int crearNodo(Nodo);
+int eliminarNodo(Nodo);
 int asignarElementoNodo(Nodo,char);
-int asignarConexionNodoIzquierda(Nodo node, Nodo);
+int asignarConexionNodoIzquierda(Nodo,Nodo);
+int asignarConexionNodoDerecha(Nodo,Nodo);
+int asignarConexionesNodo(Nodo,Nodo,Nodo);
 
 #endif //NODO_H
