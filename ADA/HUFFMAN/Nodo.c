@@ -26,7 +26,7 @@ int crearNodo(Nodo node)
 
 int eliminarNodo(Nodo node)
 {
-    free(node->cadenaDeBits);
+    free(node->elemento->cadenaDeBits);
 	free(node);
 
 	if(node != NULL) return 0;

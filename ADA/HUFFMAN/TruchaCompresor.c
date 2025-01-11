@@ -2,6 +2,7 @@
 #include <commdlg.h>
 #include <stdio.h>
 #include <string.h>
+#include "huffman.h"
 int obtenerRuta(char ** rutaSinNombreArchivo, char ** nombreArchivo);
 
 /*

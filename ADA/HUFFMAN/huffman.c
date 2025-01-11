@@ -9,7 +9,8 @@ int verificacionDat(char *archivo)
     while(archivo[i] != '\0')
     {
         j += (ind)?(1):(0);
-        if(archivo[i] == '.') ind = 1;
+        if(archivo[i] == '.')
+          (ind == 1) ? j = 0: ind == 0;
         i++;
     }
     if(j == 3)
@@ -50,9 +51,6 @@ int numeroDeElementosDeUnArreglo(char *arr)
     return i;
 }
 
-void rutaDelArchivoComprimido(char *ruta,char *nombreArchivoComprimido)
-{
 
-}
 
 
