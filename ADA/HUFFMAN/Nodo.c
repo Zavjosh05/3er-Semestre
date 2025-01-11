@@ -22,6 +22,14 @@ int crearNodo(Nodo node)
     return 1;
 }
 
+int eliminarNodo(Nodo node)
+{
+	free(node);
+
+	if(node != NULL) return 0;
+	else return 1;
+}
+
 int asignarElementoNodo(Nodo node, char elemento)
 {
     if(node == NULL || elemento == '\0') return 0;
