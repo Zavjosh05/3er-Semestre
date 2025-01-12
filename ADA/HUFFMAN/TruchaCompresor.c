@@ -2,6 +2,8 @@
 #include <commdlg.h>
 #include <stdio.h>
 #include <string.h>
+#include "Descomprimir.h"
+
 int obtenerRuta(char ** rutaSinNombreArchivo, char ** nombreArchivo, char ** extension);
 #include "huffman.h"
 
@@ -15,8 +17,8 @@ int main()
   char * rutaSinNombreArchivo;
   char * nombreArchivo;
   char * extension;
-  obtenerRuta(&rutaSinNombreArchivo, &nombreArchivo, &extension);
-  printf("La ruta es: %s%s%s\n", rutaSinNombreArchivo, nombreArchivo, extension);
+  if(obtenerRuta(&rutaSinNombreArchivo, &nombreArchivo, &extension))
+		printf("La ruta es: %s%s%s\n", rutaSinNombreArchivo, nombreArchivo, extension);
 }
 
 /**
@@ -88,7 +90,7 @@ int obtenerRuta(char ** rutaSinNombreArchivo, char ** nombreArchivo, char ** ext
 		return 1;
 	} else
 	{
-		printf("No se seleccionó ningún archivo o se canceló.\n");
+		printf("No se selecciono ningun archivo o se cancelo.\n");
 
 		return 0;
 	}
