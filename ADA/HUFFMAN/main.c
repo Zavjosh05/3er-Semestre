@@ -1,12 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "huffman.h"
-#include <iostream>
 
 int main(int argc, char **argv)
 {
     FILE *entrada, *salida, *frecuencias;
-    char *
+    int num, *elementosDeArchivo = &num;
 
     entrada = fopen(*++argv, "r");
     if (entrada == NULL)
@@ -19,11 +18,12 @@ int main(int argc, char **argv)
         printf("Si es dat");
     else
     {
+        codificacionHuffman(entrada, salida);
         nombreDelArchivoComprimido(*argv);
-        salida = fopen(*argv,"w+");
+        //salida = fopen(*argv,"w+");
         if (salida == NULL) puts("error");
         fclose(entrada);
-        fclose(salida);
+        //fclose(salida);
     }
 
     return 0;

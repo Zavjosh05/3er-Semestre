@@ -12,7 +12,7 @@ int numeroDeElementosEnArchivo(FILE *archivo)
     return i;
 }
 
-char* obtenerElementosDeArchivo(FILE *archivo, int *numeroDeElementos)
+unsigned char* obtenerElementosDeArchivo(FILE *archivo, int *numeroDeElementos)
 {
     unsigned char *elem;
     int c, j;
@@ -26,7 +26,7 @@ char* obtenerElementosDeArchivo(FILE *archivo, int *numeroDeElementos)
 
     rewind(archivo);
     for(j = 0; j < *numeroDeElementos; j++)
-        elem[j] = fgetc(archivo);
+        elem[j] = (unsigned char)fgetc(archivo);
 
     return elem;
 }

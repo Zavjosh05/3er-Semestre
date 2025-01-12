@@ -1,8 +1,8 @@
 #ifndef ARCHIVO_H
 #define ARCHIVO_H
-#include<iostream>
+#include<stdio.h>
 
 int numeroDeElementosEnArchivo(FILE*);
-char* obtenerElementosDeArchivo(FILE*,int);
+unsigned char* obtenerElementosDeArchivo(FILE*,int*);
 
 #endif //ARCHIVO_H
