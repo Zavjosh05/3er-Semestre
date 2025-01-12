@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "nodo.h"
+#include "Nodo.h"
 #include "archivo.h"
 
 int verificacionDat(char *archivo)
@@ -54,41 +54,59 @@ int numeroDeElementosDeUnArreglo(char *arr)
     return i;
 }
 
-int busquedaLinealDeElemento(unsigned char *arreglo, int tArreglo, int elemento)
+int busquedaLinealDeElemento(Caracter *arreglo, int tArreglo, unsigned char elemento)
 {
     if(arreglo == NULL || tArreglo == 0) return 0;
 
     int i;
     for(i = 0; i < tArreglo; i++)
-        if(arreglo[i] == elemento)
-            return 1;
+        if(arreglo[i]->elem == elemento)
+            return i+1;
+
     return 0;
 }
 
-unsigned char *arregloDeCaractersUnicos(unsigned char *elementosDelArchivo, int numeroDeElementos, int *tArr)
+/*
+* Funcion que devuelve un arreglo de la estructura Caracteres con cada caracter unico, asignando tambien su
+* frecuencia de aparicion en el arreglo proporcionado
+* @param elementosDelArchivo arreglo que queremos recorrer
+* @param numeroDeElementos Numero de elementos del arreglo
+* @param tArr apuntador a un entero que guardara la extencion del arreglo de caracteres a devolver
+*/
+Caracter *arregloDeCaractersUnicos(unsigned char *elementosDelArchivo, int numeroDeElementos, int *tArr)
 {
-    int i;
-    unsigned char *arr;
-    *tArr = 0;
+    if(elementosDelArchivo == NULL || numeroDeElementos <= 0) return NULL;
 
-    arr = (unsigned char*)calloc(1, sizeof(unsigned char));
+    int i, ind;
+    Caracter *arr, temp;
+    *tArr = 0;
 
     for(i = 0; i < numeroDeElementos; i++)
     {
-        if(!busquedaLinealDeElemento(arr,*tArr,elementosDelArchivo[i]))
+        ind = busquedaLinealDeElemento(arr,*tArr,elementosDelArchivo[i]);
+        if(!ind)
         {
-            if(tArr == 0)
-                arr = (unsigned char*)calloc(1, sizeof(unsigned char));
-            arr[*tArr]= elementosDelArchivo[i];
+            crearCaracter(&temp);
+            if(*tArr == 0)
+                arr = (Caracter*)calloc(1, sizeof(Caracter));
+            else
+                arr = (Caracter*)realloc(arr,sizeof(Caracter)*(*tArr+1));
+            temp->elem = elementosDelArchivo[i];
+            temp->frecuencia += 1;
+            arr[*tArr] = temp;
             *tArr += 1;
         }
+        else
+            arr[ind - 1]->frecuencia  += 1;
     }
 
     return arr;
 }
 
 /*
-* Funcion que se dedica a "castear" 
+* Funcion que se dedica a "castear" de un arreglo de char a un arreglo de caracters
+* @param arreglo arreglo de caracteres a castear
+* @param numeroDeElementos numero de elementos en el arreglo de caracterse
 */
 Caracter* generarArregloDeCaracteres(unsigned char* arreglo, int numeroDeElementos)
 {
@@ -107,8 +125,95 @@ Caracter* generarArregloDeCaracteres(unsigned char* arreglo, int numeroDeElement
 }
 
 /*
+* Funcion que "castea" un arreglo del struct Caracter a un arreglo del struct Nodo
+* @param arreglo arreglo de Caracter a castear
+* @param tArr tamaño del arreglo a castear
+*/
+Nodo* caracteresANodos(Caracter *arreglo, int tArr)
+{
+    Nodo *arregloNodo, temp;
+    int i;
+
+    arregloNodo = (Nodo*)calloc(tArr, sizeof(Nodo));
+
+    for(i = 0; i < tArr; i++)
+    {
+        crearNodo(&temp);
+        temp->elemento = arreglo[i];
+        arregloNodo[i] = temp;
+    }
+
+    return arregloNodo;
+}
+
+/*
+* funcion para generar un arbol binario de nodos
+* @param arreglo arreglo de caracteres
+* @param tArr numero de elementos del arreglo de caracteres
+*/
+Nodo generarArbolDeNodos(Caracter *arreglo, int tArr)
+{
+    Nodo *arregloNodo, padre;
+    char *cadena;
+
+    arregloNodo = caracteresANodos(arreglo, tArr);
+
+    while(tArr < 1)
+    {
+        ordernarArregloDeNodosDsc(arregloNodo, tArr);
+        crearNodoPadre(&padre);
+        padre->elemento->frecuencia +=
+            arregloNodo[tArr-1]->elemento->frecuencia + arregloNodo[tArr-1]->elemento->frecuencia;
+        asignarConexionesNodo(padre, arregloNodo[tArr-1],arregloNodo[tArr-2]);
+        tArr -= 1;
+        arregloNodo[tArr-1] = padre;
+    }
+
+    padre = arregloNodo[0];
+    free(arregloNodo);
+
+    return padre;
+}
+
+void asignarCadenasDeBits(Caracter *arreglo, int tArr)
+{
+    Nodo arbol, temp;
+    char *cadena;
+    int ind = 1, ind1 = 1, len = 0;
+
+    arbol = generarArbolDeNodos(arreglo, tArr);
+
+    temp = arbol;
+    while(ind)
+    {
+        if(!tArr)
+            ind = 0;
+        else
+        {
+            if(ind1)
+            {
+                if(temp->elemento->elem == '\0')
+                {
+                    temp = temp->izq;
+                    len += 1;
+                    cadena = (char*)realloc(cadena,sizeof(char)*len);
+                    cadena[len-1] = '0';
+                }
+                else
+                {
+                    
+                }
+            }
+
+        }
+    }
+
+}
+
+
+
+/*
 * Esta funcion generara la tabla de equivalencias (arreglo de structs en donde ya esta asignada la cadena de equivalencia en bits)
-*
 * @param elementosDelArchivo Arreglo que contiene los elementos del archivo leido
 * @param numeroDeElementos numero de elementos que contiene el arreglo del archivo
 * @param numeroDeCaracteres apuntador que nos ayuda a recuperar el numero de caracteres (struct) que vamos a obtener
@@ -116,17 +221,13 @@ Caracter* generarArregloDeCaracteres(unsigned char* arreglo, int numeroDeElement
 Caracter* generarTablaDeEquivalencias(unsigned char *elementosDelArchivo, int numeroDeElementos,  int *numeroDeCaracteres)
 {
     Caracter *arregloCaracter, temp;
-    unsigned char *arr;
+    Nodo arbol;
     int i, tArr;
+    arregloCaracter= arregloDeCaractersUnicos(elementosDelArchivo,numeroDeElementos,&tArr);
+    ordernarArregloDeCaracteresAsc(arregloCaracter,tArr);
+    arbol = generarArbolDeNodos(arregloCaracter,tArr);
 
-    arr = arregloDeCaractersUnicos(elementosDelArchivo,numeroDeElementos,&tArr);
-    arregloCaracter = (Caracter*)calloc(tArr, sizeof(Caracter));
-    for(i = 0; i < tArr; i++)
-    {
-        crearCaracter(&temp);
 
-        arregloCaracter[i] =
-    }
 
     return NULL;
 
