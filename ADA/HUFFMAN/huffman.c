@@ -54,6 +54,12 @@ int numeroDeElementosDeUnArreglo(char *arr)
     return i;
 }
 
+/*
+* Funcion para verficar la existencia de un elemento en un arreglo (de unsigned char)
+* @param arreglo arreglo de caracteress donde se buscara el elemento
+* @param tArreglo tamaño del arreglo
+* @param elemento elemento a buscar en el arreglo
+*/
 int busquedaLinealDeElemento(Caracter *arreglo, int tArreglo, unsigned char elemento)
 {
     if(arreglo == NULL || tArreglo == 0) return 0;
@@ -158,13 +164,14 @@ Nodo generarArbolDeNodos(Caracter *arreglo, int tArr)
 
     arregloNodo = caracteresANodos(arreglo, tArr);
 
-    while(tArr < 1)
+
+    while(tArr > 1)
     {
         ordernarArregloDeNodosDsc(arregloNodo, tArr);
         crearNodoPadre(&padre);
         padre->elemento->frecuencia +=
-            arregloNodo[tArr-1]->elemento->frecuencia + arregloNodo[tArr-1]->elemento->frecuencia;
-        asignarConexionesNodo(padre, arregloNodo[tArr-1],arregloNodo[tArr-2]);
+            arregloNodo[tArr-1]->elemento->frecuencia + arregloNodo[tArr-2]->elemento->frecuencia;
+        asignarConexionesNodo(padre, arregloNodo[tArr-1], arregloNodo[tArr-2]);
         tArr -= 1;
         arregloNodo[tArr-1] = padre;
     }
@@ -175,39 +182,50 @@ Nodo generarArbolDeNodos(Caracter *arreglo, int tArr)
     return padre;
 }
 
-void asignarCadenasDeBits(Caracter *arreglo, int tArr)
+/*
+* Funcion que se encarga de copiar los primeros n elementos de una cadena (de unsigned char) a otra sin incluir '\0' al final
+* de la cadena desstino
+* @param destino cadena a la que queremos copiar la informacion
+* @param fuente cadena que contiene la informacion que se quiere copiar
+* @param n numero de elementos que se quieren copiar
+*/
+int strncpyJ(unsigned char *destino, unsigned char *fuente, int n)
 {
-    Nodo arbol, temp;
-    char *cadena;
-    int ind = 1, ind1 = 1, len = 0;
+  	if(destino == NULL || fuente == NULL || n <= 0)
+          return 0;
 
-    arbol = generarArbolDeNodos(arreglo, tArr);
+	int i;
 
-    temp = arbol;
-    while(ind)
+	for(i = 0; i < n; i++)
+		destino[i] = fuente[i];
+
+	return 1;
+}
+
+void asignarCadenasDeBits(Nodo nodoActual, Caracter *arregloCaracter, int tArr, unsigned char **arregloDeBits, int len)
+{
+  	int pos;
+	unsigned char *arrBits;
+
+	if(nodoActual->elemento->elem == '\0')
+	{
+        *arregloDeBits = (unsigned char*)realloc(*arregloDeBits, (len+1)*sizeof(unsigned char));
+        (*arregloDeBits)[len+1] = '\0';
+        (*arregloDeBits)[len] = '0';
+        asignarCadenasDeBits(nodoActual->izq, arregloCaracter, tArr, arregloDeBits, len+1);
+        (*arregloDeBits)[len] = '1';
+        (*arregloDeBits)[len+1] = '\0';
+        asignarCadenasDeBits(nodoActual->der, arregloCaracter, tArr, arregloDeBits, len+1);
+	}
+    else
     {
-        if(!tArr)
-            ind = 0;
-        else
-        {
-            if(ind1)
-            {
-                if(temp->elemento->elem == '\0')
-                {
-                    temp = temp->izq;
-                    len += 1;
-                    cadena = (char*)realloc(cadena,sizeof(char)*len);
-                    cadena[len-1] = '0';
-                }
-                else
-                {
-                    
-                }
-            }
-
-        }
+        pos = busquedaLinealDeElemento(arregloCaracter,tArr,nodoActual->elemento->elem);
+        arrBits = (unsigned char*)calloc(len, sizeof(unsigned char));
+        arrBits[len] = '\0';
+        strncpyJ(arrBits, *arregloDeBits, len);
+        arregloCaracter[pos-1]->cadenaDeBits = arrBits;
+        arregloCaracter[pos-1]->tamCadena = len;
     }
-
 }
 
 
@@ -223,10 +241,23 @@ Caracter* generarTablaDeEquivalencias(unsigned char *elementosDelArchivo, int nu
     Caracter *arregloCaracter, temp;
     Nodo arbol;
     int i, tArr;
+    unsigned char **arregloDeBits;
+
+	arregloDeBits = (unsigned char**)calloc(1, sizeof(unsigned char*));
+	if(arregloDeBits == NULL) exit(-1);
+    *arregloDeBits = (unsigned char*)calloc(1, sizeof(unsigned char));
+    if(*arregloDeBits == NULL) exit(-1);
+
     arregloCaracter= arregloDeCaractersUnicos(elementosDelArchivo,numeroDeElementos,&tArr);
     ordernarArregloDeCaracteresAsc(arregloCaracter,tArr);
+    imprimirArregloDeCaracter(arregloCaracter, tArr);
     arbol = generarArbolDeNodos(arregloCaracter,tArr);
-
+	asignarCadenasDeBits(arbol, arregloCaracter,tArr,arregloDeBits,0);
+	free(*arregloDeBits);
+    free(arregloDeBits);
+    ordernarArregloDeCaracteresDsc(arregloCaracter,tArr);
+    printf("hodjlds;jfl;kasdj;lkajf\n\n");
+	imprimirArregloDeCaracter(arregloCaracter, tArr);
 
 
     return NULL;
@@ -260,7 +291,6 @@ void codificacionHuffman(FILE *fuente, FILE *destino)
     int numDeElementos, numDeCaracteres;
 
     elementosDelArchivo = obtenerElementosDeArchivo(fuente,&numDeElementos);
-
     arregloDeCaracteres = generarTablaDeEquivalencias(elementosDelArchivo, numDeElementos, &numDeCaracteres);
 
 }

@@ -6,6 +6,9 @@ int crearNodo(Nodo *node)
 {
     *node = (Nodo)calloc(1, sizeof(t_nodo));
 
+    (*node)->izq = NULL;
+    (*node)->der = NULL;
+
     if (node == NULL)
       return 0;
     return 1;
@@ -16,6 +19,7 @@ int crearNodoPadre(Nodo *node)
     *node = (Nodo)calloc(1, sizeof(t_nodo));
     crearCaracter(&((*node)->elemento));
     (*node)->elemento->elem = '\0';
+    (*node)->elemento->frecuencia = 0;
 
     if (node == NULL || (*node)->elemento == NULL)
       return 0;
@@ -73,6 +77,7 @@ int asignarConexionNodoDerecha(Nodo node, Nodo der)
   if(node == NULL || der == NULL) return 0;
 
   node->der = der;
+  return 1;
 }
 
 int asignarConexionesNodo(Nodo node, Nodo izq, Nodo der)
@@ -96,6 +101,14 @@ void imprimirCaracter(Caracter character)
          character->elem, character->frecuencia, character->cadenaDeBits, character->tamCadena);
 }
 
+void imprimirArregloDeCaracter(Caracter *arr, int tArr)
+{
+	int i;
+
+	for(i = 0; i < tArr; i++)
+          imprimirCaracter(arr[i]);
+}
+
 /*Funcion que se encarga de imprimir los datos de un nodo, si este es nulo, se informara de esto
 * @param node nodo que deseamos imprimir
 */
@@ -108,10 +121,24 @@ void imprimirNodo(Nodo node)
         puts("Nodo: ");
         imprimirCaracter(node->elemento);
         puts("Conectado a nodos: \nNodo izquierda: ");
-        imprimirCaracter(node->izq->elemento);
+        if(node->izq != NULL)
+        	imprimirCaracter(node->izq->elemento);
+        else
+          puts("Nodo nulo");
         puts("Nodo derecha: ");
-        imprimirCaracter(node->der->elemento);
+        if(node->der != NULL)
+        	imprimirCaracter(node->der->elemento);
+        else
+          puts("Nodo nulo");
     }
+}
+
+void imprimirArregloDeNodo(Nodo *arr, int tArr)
+{
+	int i;
+
+	for(i = 0; i < tArr; i++)
+          imprimirNodo(arr[i]);
 }
 
 /*
@@ -128,7 +155,7 @@ void ordernarArregloDeNodosAsc(Nodo *arr, int tam)
     for (gap = tam / 2; gap > 0; gap /= 2)
         for (i = gap; i < tam; i++) {
             temp = arr[i];
-            for (j = i; j >= gap && arr[j - gap]->elemento->frecuencia < temp->elemento->frecuencia; j -= gap)
+            for (j = i; j >= gap && arr[j - gap]->elemento->frecuencia > temp->elemento->frecuencia; j -= gap)
                 arr[j] = arr[j - gap];
             arr[j] = temp;
         }
@@ -147,7 +174,7 @@ void ordernarArregloDeNodosDsc(Nodo *arr, int tam)
     for (gap = tam / 2; gap > 0; gap /= 2)
         for (i = gap; i < tam; i++) {
             temp = arr[i];
-            for (j = i; j >= gap && arr[j - gap]->elemento->frecuencia > temp->elemento->frecuencia; j -= gap)
+            for (j = i; j >= gap && arr[j - gap]->elemento->frecuencia < temp->elemento->frecuencia; j -= gap)
                 arr[j] = arr[j - gap];
             arr[j] = temp;
         }
@@ -167,7 +194,7 @@ void ordernarArregloDeCaracteresAsc(Caracter *arr, int tam)
     for (gap = tam / 2; gap > 0; gap /= 2)
         for (i = gap; i < tam; i++) {
             temp = arr[i];
-            for (j = i; j >= gap && arr[j - gap]->frecuencia < temp->frecuencia; j -= gap)
+            for (j = i; j >= gap && arr[j - gap]->frecuencia > temp->frecuencia; j -= gap)
                 arr[j] = arr[j - gap];
             arr[j] = temp;
         }
@@ -187,7 +214,7 @@ void ordernarArregloDeCaracteresDsc(Caracter *arr, int tam)
     for (gap = tam / 2; gap > 0; gap /= 2)
         for (i = gap; i < tam; i++) {
             temp = arr[i];
-            for (j = i; j >= gap && arr[j - gap]->frecuencia > temp->frecuencia; j -= gap)
+            for (j = i; j >= gap && arr[j - gap]->frecuencia < temp->frecuencia; j -= gap)
                 arr[j] = arr[j - gap];
             arr[j] = temp;
         }

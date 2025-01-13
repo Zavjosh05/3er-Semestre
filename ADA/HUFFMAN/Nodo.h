@@ -5,7 +5,7 @@ typedef struct caracter
 {
     unsigned char elem;
     int frecuencia;
-    char  *cadenaDeBits;
+    unsigned char  *cadenaDeBits;
     int tamCadena;
 }*Caracter, t_caracter;
 
@@ -68,8 +68,16 @@ int asignarConexionNodoDerecha(Nodo,Nodo);
 int asignarConexionesNodo(Nodo,Nodo,Nodo);
 
 void imprimirCaracter(Caracter character);
+/*
+* Funcion que se encarga de imprimir un arreglo de caracteres, indicando su numero de elementos
+* @param arr arreglo de Caracter que queremos imprimir
+* @param tArr tamaño del arreglo
+*/
+void imprimirArregloDeCaracter(Caracter *arr, int tArr);
 
 void imprimirNodo(Nodo node);
+
+void imprimirArregloDeNodo(Nodo *arr, int tArr);
 
 void ordernarArregloDeNodosAsc(Nodo*,int);
 
