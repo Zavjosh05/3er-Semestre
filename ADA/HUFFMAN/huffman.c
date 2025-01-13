@@ -285,32 +285,90 @@ unsigned char* generarCodificacoDelContenido(Caracter *tablaDeEquivalencias, int
     return contenidoCodificado;
 }
 
-unsigned char* contenidoCodificadoABits(unsigned char * contenidoCodificado, int tamContenido, int *tam)
+unsigned char* contenidoCodificadoABits(unsigned char * contenidoCodificado, int tamContenido, int *tamContenidoBinario)
 {
+	unsigned char * contenidoBinario;
+    int i, j, ind, cuenta, numeroDeBits, numeroDeResiduos;
 
+    *tamContenidoBinario = 0;
+    numeroDeBits = tamContenido/8;
+    numeroDeResiduos = tamContenido%2;
+    cuenta = 7;
+    ind = 0;
+	printf("numeroDeBits = %d, numeroDeResiduos = %d\n", numeroDeBits, numeroDeResiduos);
+    if(numeroDeResiduos)
+    	contenidoBinario = (unsigned char*)calloc(numeroDeBits+1, sizeof(unsigned char));
+    else
+    	contenidoBinario = (unsigned char*)calloc(numeroDeBits, sizeof(unsigned char));
+
+    *tamContenidoBinario = numeroDeBits;
+
+    for(i = 0; i < numeroDeBits;i++)
+    {
+    	if(i == numeroDeBits-1 && numeroDeResiduos)
+		{
+        	for(j = 0; j < 8; j++)
+        	{
+            	if(numeroDeResiduos)
+                	if(contenidoCodificado[ind++] == '0')
+                		contenidoBinario[i] &= ~(1 << cuenta);
+                	else
+                		contenidoBinario[i] |= (1 << cuenta);
+                else
+                	contenidoBinario[i] &= ~(1 << cuenta);
+                cuenta--;
+        	}
+		}
+        else
+        {
+			for(j = 0; j < 8;j++)
+          	{
+                if(contenidoCodificado[ind++] == '0')
+                	contenidoBinario[i] &= ~(1 << cuenta);
+                else
+                	contenidoBinario[i] |= (1 << cuenta);
+                cuenta--;
+          	}
+            cuenta = 7;
+        }
+    }
+
+    return contenidoBinario;
 }
 
-unsigned char* cadenaDeTablaDeEquivalencias(Caracter *tablaDeEquivalencias, int tamTabla, int *tamTablaCadena)
+unsigned char* cadenaDeTablaDeEquivalencias(Caracter *tablaDeEquivalencias, int tamTabla, int *tamTablaCadena,
+                                            char * nombreDelArchivo, char * extension)
 {
 	int i, j, ind, iInicio, iFin, iExtencio, iNom;
-    unsigned char *cadenaDeTablaDeEquivalencias, inicio[] = "INICIO", fin[] = "FIN";
+    unsigned char *cadenaDeTablaDeEquivalencias;
+    char inicio[] = "INICIO", fin[] = "FIN";
 
     for(i = 0; i < tamTabla; i++)
     	*tamTablaCadena += tablaDeEquivalencias[i]->tamCadena+1;//Esta suma concidera el espacio para la cadena de bits y el caracter
-    *tamTablaCadena += tamTabla-1;//tamTabla-1 representa el numero de saltos de linea que se van a agregar en la cadena
+    *tamTablaCadena += tamTabla + strlen(inicio) + strlen(fin)
+                       + strlen(nombreDelArchivo) + strlen(extension);//tamTabla representa el numero de saltos de
+                                                                      // linea que se van a agregar en la cadena
 
     cadenaDeTablaDeEquivalencias = (unsigned char*)calloc(*tamTablaCadena, sizeof(unsigned char));
     cadenaDeTablaDeEquivalencias[*tamTablaCadena] = '\0';
     ind = 0;
 
+    for(i = 0; i < strlen(inicio); i++)
+      	cadenaDeTablaDeEquivalencias[ind++] = inicio[i];
+    for(i = 0; i < strlen(nombreDelArchivo); i++)
+    	cadenaDeTablaDeEquivalencias[ind++] = nombreDelArchivo[i];
+    cadenaDeTablaDeEquivalencias[ind++] = '\n';
     for(i = 0; i < tamTabla; i++)
     {
     	cadenaDeTablaDeEquivalencias[ind++] = tablaDeEquivalencias[i]->elem;
         for(j = 0; j < tablaDeEquivalencias[i]->tamCadena; j++)
 			cadenaDeTablaDeEquivalencias[ind++] = tablaDeEquivalencias[i]->cadenaDeBits[j];
-        if(i < tamTabla-1)
-        	cadenaDeTablaDeEquivalencias[ind++] = '\n';
+        cadenaDeTablaDeEquivalencias[ind++] = '\n';
     }
+    for(i = 0; i < strlen(fin); i++)
+    	cadenaDeTablaDeEquivalencias[ind++] = fin[i];
+    for(i = 1; i < strlen(extension); i++)
+      	cadenaDeTablaDeEquivalencias[ind++] = extension[i];
     printf("ind: %d, tamTablaCadena: %d\n",ind, *tamTablaCadena);
 
 	return cadenaDeTablaDeEquivalencias;
@@ -345,9 +403,9 @@ char * concaternarRutaNombreYExtension(char * rutaSinNombreArchivo, char * nombr
 void codificacionHuffman(char * rutaSinNombreArchivo, char * nombreArchivo, char * extension)
 {
     Caracter *arregloDeCaracteres;
-    unsigned char *elementosDelArchivo, *contenidoCodificado, *cadenaDeTabla;
+    unsigned char *elementosDelArchivo, *contenidoCodificado, *cadenaDeTabla, *cadenaDeBits;
     char *rutaFuente, *rutaDestino, *rutaFrecuencia;
-    int numDeElementos, numDeCaracteres, tamContenidoCodificado, numCadenaDeTabla,
+    int numDeElementos, numDeCaracteres, tamContenidoCodificado, numCadenaDeTabla, numCadenaDeBits,
         tamFuente, tamDestino, tamFrecuencia;
     FILE *fuente, *destino, *frecuencia;
 
@@ -363,17 +421,23 @@ void codificacionHuffman(char * rutaSinNombreArchivo, char * nombreArchivo, char
     if(frecuencia == NULL) exit(-1);
 
     elementosDelArchivo = obtenerElementosDeArchivo(fuente,&numDeElementos);
-    printf("%s\n", elementosDelArchivo);
     arregloDeCaracteres = generarTablaDeEquivalencias(elementosDelArchivo, numDeElementos, &numDeCaracteres);
     imprimirArregloDeCaracter(arregloDeCaracteres, numDeCaracteres);
 	contenidoCodificado = generarCodificacoDelContenido(arregloDeCaracteres, numDeCaracteres, elementosDelArchivo,
                                                         numDeElementos,&tamContenidoCodificado);
-    cadenaDeTabla = cadenaDeTablaDeEquivalencias(arregloDeCaracteres, numDeCaracteres, &numCadenaDeTabla);
+    puts("hola");
+    cadenaDeTabla = cadenaDeTablaDeEquivalencias(arregloDeCaracteres, numDeCaracteres, &numCadenaDeTabla,
+                                                     nombreArchivo, extension);
     printf("contenidoCodificado: %s\n",contenidoCodificado);
     printf("cadenaDeTabla: \n%s\n",cadenaDeTabla);
     fclose(fuente);
     escribirArchivoNormal(frecuencia, cadenaDeTabla, numCadenaDeTabla);
 	fclose(frecuencia);
+    cadenaDeBits = contenidoCodificadoABits(contenidoCodificado, tamContenidoCodificado, &numCadenaDeBits);
+    printf("numCadenaDeBits: %d\n", numCadenaDeBits);
+    printf("cadena de Bits: %s\ncadena de Bits:\t", cadenaDeBits);
+    for(int i = 0; i < numCadenaDeBits; i++)
+      	printf("0b%08b",cadenaDeBits[i]);
 
 }
 
