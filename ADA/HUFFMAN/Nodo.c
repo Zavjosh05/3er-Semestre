@@ -28,7 +28,7 @@ int crearNodoPadre(Nodo *node)
 
 int crearCaracter(Caracter *character)
 {
-    *character = (Caracter)calloc(1, sizeof(t_caracter));
+    *character = (Caracter)malloc(sizeof(t_caracter));
     (*character)->elem = '\0';
     (*character)->frecuencia = 0;
     (*character)->cadenaDeBits = NULL;
@@ -180,7 +180,7 @@ void ordenarArregloDeNodosDsc(Nodo *arr, int tam)
         }
 }
 
-/*
+/**
 * Funcion para ordenar ascendentemente un arreglo de caracteres mediante shell sort con base a la frecuencia de sus caracteres
 * @param arr arreglo a ordenar
 * @param tam tamaño del arreglo a ordenar

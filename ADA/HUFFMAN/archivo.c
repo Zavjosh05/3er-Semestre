@@ -38,9 +38,9 @@ unsigned char * obtenerElementosDeArchivoBin(FILE *archivo, int *numeroDeElement
     int c, j;
 
     *numeroDeElementos = numeroDeElementosEnArchivo(archivo);
-    printf("num: %d\n",*numeroDeElementos);
+    printf("Leer Archivo - num: %d\n",*numeroDeElementos);
 
-    elem = (unsigned char*)calloc(*numeroDeElementos, sizeof(char));
+    elem = (unsigned char*)calloc(*numeroDeElementos, sizeof(unsigned char));
 
     if(elem == NULL)
         return NULL;
@@ -48,7 +48,6 @@ unsigned char * obtenerElementosDeArchivoBin(FILE *archivo, int *numeroDeElement
     rewind(archivo);
     fread(elem, sizeof(unsigned char), *numeroDeElementos, archivo);
     elem[*numeroDeElementos] = '\0';
-    printf("%s\n", elem);
 
     return elem;
 }
