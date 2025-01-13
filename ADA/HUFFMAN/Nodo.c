@@ -141,7 +141,7 @@ void imprimirArregloDeNodo(Nodo *arr, int tArr)
           imprimirNodo(arr[i]);
 }
 
-/*
+/**
 * Funcion para ordenar un arreglo ascendentemente de nodos mediante shell sort con base a la frecuencia de sus caracteres
 * @param arr arreglo a ordenar
 * @param tam tamaño del arreglo a ordenar

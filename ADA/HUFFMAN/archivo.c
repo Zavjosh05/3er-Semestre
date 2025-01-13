@@ -32,10 +32,28 @@ unsigned char * obtenerElementosDeArchivo(FILE *archivo, int *numeroDeElementos)
     return elem;
 }
 
-void escribirArchivoNormal(FILE *archivoDestino, unsigned char *cadena, int tamCadena)
+int escribirArchivoNormal(FILE *archivoDestino, unsigned char *cadena, int tamCadena)
 {
+  	if(cadena == NULL || tamCadena == 0 || cadena == NULL)
+          return 0;
+
 	int i;
 
     for(i = 0; i < tamCadena; i++)
 		fputc(cadena[i], archivoDestino);
+
+    return 1;
+}
+
+int escribirArchivoBinario(FILE *archivoDestino, unsigned char *cadena, int tamCadena)
+{
+  	if(cadena == NULL || tamCadena == 0 || cadena == NULL)
+          return 0;
+
+	int i;
+
+    for(i = 0; i < tamCadena; i++)
+		fputc(cadena[i], archivoDestino);
+
+    return 1;
 }
