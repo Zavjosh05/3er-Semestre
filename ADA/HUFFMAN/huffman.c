@@ -316,44 +316,54 @@ unsigned char* cadenaConTablaY(unsigned char *tablaDeEquivalencias, unsigned cha
 
 }
 
-/*
+char * concaternarRutaNombreYExtension(char * rutaSinNombreArchivo, char * nombreArchivo, char * extension, int *tamRuta)
+{
+	int tRutaSin = strlen(rutaSinNombreArchivo), tNombreArch = strlen(nombreArchivo), tExtension = strlen(extension), i, ind;
+	char * ruta;
+
+    *tamRuta = 0;
+    *tamRuta += tRutaSin + tNombreArch + tExtension;
+    ruta = (char*)calloc(*tamRuta, sizeof(char));
+
+    ind = 0;
+    for(i = 0; i < tRutaSin; i++)
+    	ruta[ind++] = rutaSinNombreArchivo[i];
+    for(i = 0; i < tNombreArch; i++)
+      	ruta[ind++] = nombreArchivo[i];
+    for(i = 0; i < tExtension; i++)
+      	ruta[ind++] = extension[i];
+    ruta[ind] = '\0';
+
+    return ruta;
+}
+
+/**
 * Funcion principal que engloba todos los procesos para comprimir mediante el metodo de Huffman
 * @param fuente apuntador hacia el archivo que queremos comprimir
 * @param destino apuntador hacia el archivo donde se almacenara la informacion comprimida
- */
+*/
 void codificacionHuffman(char * rutaSinNombreArchivo, char * nombreArchivo, char * extension)
 {
     Caracter *arregloDeCaracteres;
     unsigned char *elementosDelArchivo, *contenidoCodificado, *cadenaDeTabla;
-    int numDeElementos, numDeCaracteres, tamContenidoCodificado, numCadenaDeTabla;
+    char *rutaFuente, *rutaDestino, *rutaFrecuencia;
+    int numDeElementos, numDeCaracteres, tamContenidoCodificado, numCadenaDeTabla,
+        tamFuente, tamDestino, tamFrecuencia;
     FILE *fuente, *destino, *frecuencia;
 
-	char * ruta1 = (char *) malloc(sizeof(char));
-    strcat(ruta1, rutaSinNombreArchivo);
-	strcat(ruta1, nombreArchivo);
-    strcat(ruta1, extension);
-    printf("%s", ruta1);
+	rutaFuente = concaternarRutaNombreYExtension(rutaSinNombreArchivo, nombreArchivo, extension, &tamFuente);
+	rutaDestino = concaternarRutaNombreYExtension(rutaSinNombreArchivo,nombreArchivo, ".dat", &tamDestino);
+	rutaFrecuencia = concaternarRutaNombreYExtension(rutaSinNombreArchivo,nombreArchivo, "f.txt", &tamFrecuencia);
 
-    char * ruta2 = (char *) malloc(sizeof(char));
-    strcat(ruta2, rutaSinNombreArchivo);
-    strcat(ruta2, nombreArchivo);
-    strcat(ruta2, ".dat\0");
-    printf("%s", ruta2);
-
-    char * ruta3 = (char *) malloc(sizeof(char));
-    strcat(ruta3, rutaSinNombreArchivo);
-    strcat(ruta3, nombreArchivo);
-    strcat(ruta3, "f.txt\0");
-    printf("%s", ruta3);
-
-    frecuencia = fopen(ruta3, "w+");
-    if(frecuencia == NULL) exit(-1);
-    destino = fopen(ruta2, "wb");
-    if(destino == NULL) exit(-1);
-    fuente = fopen(ruta1, "r");
+    fuente = fopen(rutaFuente, "r");
     if(fuente == NULL) exit(-1);
+    destino = fopen(rutaDestino, "wb");
+    if(destino == NULL) exit(-1);
+    frecuencia = fopen(rutaFrecuencia, "w+");
+    if(frecuencia == NULL) exit(-1);
 
     elementosDelArchivo = obtenerElementosDeArchivo(fuente,&numDeElementos);
+    printf("%s\n", elementosDelArchivo);
     arregloDeCaracteres = generarTablaDeEquivalencias(elementosDelArchivo, numDeElementos, &numDeCaracteres);
     imprimirArregloDeCaracter(arregloDeCaracteres, numDeCaracteres);
 	contenidoCodificado = generarCodificacoDelContenido(arregloDeCaracteres, numDeCaracteres, elementosDelArchivo,
@@ -361,13 +371,11 @@ void codificacionHuffman(char * rutaSinNombreArchivo, char * nombreArchivo, char
     cadenaDeTabla = cadenaDeTablaDeEquivalencias(arregloDeCaracteres, numDeCaracteres, &numCadenaDeTabla);
     printf("contenidoCodificado: %s\n",contenidoCodificado);
     printf("cadenaDeTabla: \n%s\n",cadenaDeTabla);
-
-    free(elementosDelArchivo);
-    free(contenidoCodificado);
-    free(cadenaDeTabla);
     fclose(fuente);
-    fclose(destino);
-    fclose(frecuencia);
+
+    escribirArchivoNormal(frecuencia, cadenaDeTabla, numCadenaDeTabla);
+
+
 }
 
 

@@ -4,5 +4,6 @@
 
 int numeroDeElementosEnArchivo(FILE*);
 unsigned char* obtenerElementosDeArchivo(FILE*,int*);
+void escribirArchivoNormal(FILE *archivoDestino, unsigned char *cadena, int tamCadena);
 
 #endif //ARCHIVO_H

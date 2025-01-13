@@ -31,3 +31,11 @@ unsigned char * obtenerElementosDeArchivo(FILE *archivo, int *numeroDeElementos)
 
     return elem;
 }
+
+void escribirArchivoNormal(FILE *archivoDestino, unsigned char *cadena, int tamCadena)
+{
+	int i;
+
+    for(i = 0; i < tamCadena; i++)
+		fputc(cadena[i], archivoDestino);
+}
