@@ -19,7 +19,7 @@ int main()
   char * nombreArchivo;
   char * extension;
   if(obtenerRuta(&rutaSinNombreArchivo, &nombreArchivo, &extension))
-  	printf("La ruta es: %s%s%s\n", rutaSinNombreArchivo, nombreArchivo, extension);
+  	printf("La ruta es: %s%s%	s\n", rutaSinNombreArchivo, nombreArchivo, extension);
   unsigned a = 255;
 
 }

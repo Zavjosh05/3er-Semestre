@@ -7,14 +7,14 @@
 
 void descomprimir(char * rutaArchivo, char * nombreArchivo, char * extension)
 {
-  char * rutaCompleta = malloc(sizeof(char));
+  char * rutaTablaDeFrecuencias = malloc(sizeof(char));
 
-  strcat(rutaCompleta, rutaArchivo);
-  strcat(rutaCompleta, nombreArchivo);
-  strcat(rutaCompleta, "f");
-  strcat(rutaCompleta, ".txt");
+  strcat(rutaTablaDeFrecuencias, rutaArchivo);
+  strcat(rutaTablaDeFrecuencias, nombreArchivo);
+  strcat(rutaTablaDeFrecuencias, "f");
+  strcat(rutaTablaDeFrecuencias, ".txt");
 
-  FILE * archivoTablaFrecuencias = fopen(rutaCompleta, "r");
+  FILE * archivoTablaFrecuencias = fopen(rutaTablaDeFrecuencias, "r");
   if (archivoTablaFrecuencias == NULL)
   {
     printf("\nNo es encuentra la tabla de equivalencias, favor de agregar el archivo %sf.txt\n", nombreArchivo);
@@ -47,11 +47,19 @@ void descomprimir(char * rutaArchivo, char * nombreArchivo, char * extension)
 
   strcat(rutaCompletaDescomprimido, rutaArchivo);
   strcat(rutaCompletaDescomprimido, nombreArchivo);
-  strcat(rutaCompletaDescomprimido, "Descomprimido");
+  strcat(rutaCompletaDescomprimido, "d");
   strcat(rutaCompletaDescomprimido, extensionDescomprimido);
 
+  char * rutaCompletaArchivoComprimido = malloc(sizeof(char));
+  strcat(rutaCompletaDescomprimido, rutaArchivo);
+  strcat(rutaCompletaDescomprimido, nombreArchivo);
+  strcat(rutaCompletaDescomprimido, extension);
+
   FILE * archivoDescomprimido = fopen(rutaCompletaDescomprimido, "w");
-  
+
+  FILE * archivoComprimido = fopen(rutaCompletaDescomprimido, "rb");
+
+
 }
 
 int comprobarCadenaEsta(unsigned char * arrayCaracteresArchivo, int numCaracteresArchivo, char * palabraABuscar, int * numAEmpezar)
