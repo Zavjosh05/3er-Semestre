@@ -16,7 +16,7 @@ typedef struct nodo
     struct nodo *izq, *der;
 }*Nodo, t_nodo;
 
-/*
+/**
 * Funcion encargada de crear una instancia de la estructura nodo
 * @param node nodo el cual se quiere crear
 */
@@ -79,13 +79,13 @@ void imprimirNodo(Nodo node);
 
 void imprimirArregloDeNodo(Nodo *arr, int tArr);
 
-void ordernarArregloDeNodosAsc(Nodo*,int);
+void ordenarArregloDeNodosAsc(Nodo*,int);
 
-void ordernarArregloDeNodosDsc(Nodo*,int);
+void ordenarArregloDeNodosDsc(Nodo*,int);
 
-void ordernarArregloDeCaracteresAsc(Caracter*,int);
+void ordenarArregloDeCaracteresAsc(Caracter*,int);
 
-void ordernarArregloDeCaracteresDsc(Caracter*,int);
+void ordenarArregloDeCaracteresDsc(Caracter*,int);
 
 
 #endif //NODO_H

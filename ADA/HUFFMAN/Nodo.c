@@ -146,7 +146,7 @@ void imprimirArregloDeNodo(Nodo *arr, int tArr)
 * @param arr arreglo a ordenar
 * @param tam tamaño del arreglo a ordenar
 */
-void ordernarArregloDeNodosAsc(Nodo *arr, int tam)
+void ordenarArregloDeNodosAsc(Nodo *arr, int tam)
 {
     int gap, i, j;
     Nodo temp;
@@ -165,7 +165,7 @@ void ordernarArregloDeNodosAsc(Nodo *arr, int tam)
 * @param arr arreglo a ordenar
 * @param tam tamaño del arreglo a ordenar
 */
-void ordernarArregloDeNodosDsc(Nodo *arr, int tam)
+void ordenarArregloDeNodosDsc(Nodo *arr, int tam)
 {
     int gap, i, j;
     Nodo temp;
@@ -185,7 +185,7 @@ void ordernarArregloDeNodosDsc(Nodo *arr, int tam)
 * @param arr arreglo a ordenar
 * @param tam tamaño del arreglo a ordenar
 */
-void ordernarArregloDeCaracteresAsc(Caracter *arr, int tam)
+void ordenarArregloDeCaracteresAsc(Caracter *arr, int tam)
 {
     int gap, i, j;
     Caracter temp;
@@ -205,7 +205,7 @@ void ordernarArregloDeCaracteresAsc(Caracter *arr, int tam)
 * @param arr arreglo a ordenar
 * @param tam tamaño del arreglo a ordenar
 */
-void ordernarArregloDeCaracteresDsc(Caracter *arr, int tam)
+void ordenarArregloDeCaracteresDsc(Caracter *arr, int tam)
 {
     int gap, i, j;
     Caracter temp;
