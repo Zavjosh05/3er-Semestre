@@ -4,15 +4,15 @@
 #include "archivo.h"
 #include <string.h>
 #include "Nodo.h"
+#include "huffman.h"
 
 void descomprimir(char * rutaArchivo, char * nombreArchivo, char * extension)
 {
-  char * rutaTablaDeFrecuencias = malloc(sizeof(char));
+  int tamRutaTablaDeFrecuencias;
+  char * rutaTablaDeFrecuencias = concaternarRutaNombreYExtension(rutaArchivo, nombreArchivo, extension, &tamRutaTablaDeFrecuencias);
+  printf("Hola mundo\n");
 
-  strcat(rutaTablaDeFrecuencias, rutaArchivo);
-  strcat(rutaTablaDeFrecuencias, nombreArchivo);
-  strcat(rutaTablaDeFrecuencias, "f");
-  strcat(rutaTablaDeFrecuencias, ".txt");
+  printf("%s", rutaTablaDeFrecuencias);
 
   FILE * archivoTablaFrecuencias = fopen(rutaTablaDeFrecuencias, "r");
   if (archivoTablaFrecuencias == NULL)
@@ -21,6 +21,7 @@ void descomprimir(char * rutaArchivo, char * nombreArchivo, char * extension)
     exit(-1);
   }
 
+/*
   unsigned char * arrayCaracteresArchivoFrecuencias;
 
   char * nombreDelArchivoDescomprimido, * extensionDescomprimido;
@@ -56,9 +57,14 @@ void descomprimir(char * rutaArchivo, char * nombreArchivo, char * extension)
   strcat(rutaCompletaDescomprimido, extension);
 
   FILE * archivoDescomprimido = fopen(rutaCompletaDescomprimido, "w");
-
+  if(archivoDescomprimido == NULL)
+    exit(-1);
   FILE * archivoComprimido = fopen(rutaCompletaDescomprimido, "rb");
-
+  if(archivoComprimido == NULL)
+    exit(-1);
+  unsigned char * arrayArchivoComprimido = NULL;
+  arrayArchivoComprimido = obtenerElementosDeArchivo(archivoComprimido, &tamArrayCaracteres);
+*/
 
 }
 

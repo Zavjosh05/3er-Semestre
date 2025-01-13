@@ -375,7 +375,6 @@ void codificacionHuffman(char * rutaSinNombreArchivo, char * nombreArchivo, char
 
     escribirArchivoNormal(frecuencia, cadenaDeTabla, numCadenaDeTabla);
 
-
 }
 
 

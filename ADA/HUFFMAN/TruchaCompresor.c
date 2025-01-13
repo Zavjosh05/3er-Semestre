@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "Descomprimir.h"
 #include "huffman.h"
 
 int obtenerRuta(char ** rutaSinNombreArchivo, char ** nombreArchivo, char ** extension);
@@ -18,9 +19,6 @@ int main()
 	char * rutaSinNombreArchivo;
 	char * nombreArchivo;
 	char * extension;
-	char * nombreArchivoConExtension;
-	char * nombreArchivoFrecuencias;
-	FILE * entrada, * salida, * frecuencias;
 	if(!obtenerRuta(&rutaSinNombreArchivo, &nombreArchivo, &extension))
 	{
 		printf("Fin del programa papus\n");
@@ -28,12 +26,12 @@ int main()
 	}
 	if (comprobarCadena(extension,(int)strlen(extension),".dat"))
 	{
-
+		printf("Hola mundo\n");
+		descomprimir(rutaSinNombreArchivo, nombreArchivo, extension);
 	}
 	else
 		codificacionHuffman(rutaSinNombreArchivo, nombreArchivo, extension);
 
-	unsigned a = 255;
 	return 0;
 }
 
