@@ -9,8 +9,7 @@
 void descomprimir(char * rutaArchivo, char * nombreArchivo, char * extension)
 {
   int tamRutaTablaDeFrecuencias;
-  char * rutaTablaDeFrecuencias = concaternarRutaNombreYExtension(rutaArchivo, nombreArchivo, extension, &tamRutaTablaDeFrecuencias);
-  printf("Hola mundo\n");
+  char * rutaTablaDeFrecuencias = concaternarRutaNombreYExtension(rutaArchivo, nombreArchivo, "f.txt", &tamRutaTablaDeFrecuencias);
 
   printf("%s", rutaTablaDeFrecuencias);
 
@@ -21,7 +20,6 @@ void descomprimir(char * rutaArchivo, char * nombreArchivo, char * extension)
     exit(-1);
   }
 
-/*
   unsigned char * arrayCaracteresArchivoFrecuencias;
 
   char * nombreDelArchivoDescomprimido, * extensionDescomprimido;
@@ -32,17 +30,26 @@ void descomprimir(char * rutaArchivo, char * nombreArchivo, char * extension)
 
   arrayCaracteresArchivoFrecuencias = obtenerElementosDeArchivo(archivoTablaFrecuencias, &numCaracteresArchivoFrecuencias);
 
+  printf("\n%s\n", arrayCaracteresArchivoFrecuencias);
+
   if(!comprobarCadenaEsta(arrayCaracteresArchivoFrecuencias, numCaracteresArchivoFrecuencias, "INICIO", &posicionActual))
   {
     printf("\aEl .txt relacionado con este archivo comprimido no es el generado por TRUCHA CORPORATION\n");
     exit(-1);
   }
 
+  printf("\nola kikin\n");
+
   nombreDelArchivoDescomprimido = cadenaAntesDeUnSaltoDeLinea(arrayCaracteresArchivoFrecuencias, numCaracteresArchivoFrecuencias, &posicionActual);
+
+  printf("\n%s\n", nombreDelArchivoDescomprimido);
 
   llenarArrayCaracteres(arrayCaracteresArchivoFrecuencias, numCaracteresArchivoFrecuencias, &posicionActual, &arrayCaracteres, &tamArrayCaracteres);
 
   extensionDescomprimido = cadenaAntesDeUnSaltoDeLinea(arrayCaracteresArchivoFrecuencias, numCaracteresArchivoFrecuencias, &posicionActual);
+
+  printf("\n%s\n", nombreDelArchivoDescomprimido);
+  /*
 
   char * rutaCompletaDescomprimido = malloc(sizeof(char));
 
@@ -71,9 +78,9 @@ void descomprimir(char * rutaArchivo, char * nombreArchivo, char * extension)
 int comprobarCadenaEsta(unsigned char * arrayCaracteresArchivo, int numCaracteresArchivo, char * palabraABuscar, int * numAEmpezar)
 {
   int contador = 0;
-  for(int i = (*numAEmpezar); i < numCaracteresArchivo && palabraABuscar[i] != '\0'; (*numAEmpezar)++)
+  for(; ((*numAEmpezar) < numCaracteresArchivo) && (palabraABuscar[(*numAEmpezar)] != '\0'); (*numAEmpezar)++)
   {
-    if(arrayCaracteresArchivo[i] == palabraABuscar[i])
+    if(arrayCaracteresArchivo[(*numAEmpezar)] == palabraABuscar[(*numAEmpezar)])
       contador++;
   }
   if(contador == strlen(palabraABuscar))
@@ -83,12 +90,13 @@ int comprobarCadenaEsta(unsigned char * arrayCaracteresArchivo, int numCaractere
 
 char * cadenaAntesDeUnSaltoDeLinea(unsigned char * arrayCaracteresArchivo, int numCaracteresArchivo, int * numAEmpezar)
 {
-  char * cadenaCreada;
-  int numAmpezarCopia = *numAEmpezar, tamCadenaCreada = 0, i = 0;
-  for(i = numAmpezarCopia; i < numCaracteresArchivo && arrayCaracteresArchivo[i] != '\n'; (*numAEmpezar)++)
-    addACadena(&cadenaCreada, arrayCaracteresArchivo[i], &tamCadenaCreada);
-  cadenaCreada[i] = '\0';
-  i++;
+  char * cadenaCreada = NULL;
+  int tamCadenaCreada = 0;
+  for(; ((*numAEmpezar) < numCaracteresArchivo) && (arrayCaracteresArchivo[(*numAEmpezar)] != '\n'); (*numAEmpezar)++)
+    addACadena(&cadenaCreada, arrayCaracteresArchivo[(*numAEmpezar)], &tamCadenaCreada);
+  cadenaCreada[(*numAEmpezar)] = '\0';
+  (*numAEmpezar)++;
+  printf("\nLa cadena es: %s\n", cadenaCreada);
   return cadenaCreada;
 }
 
@@ -105,12 +113,19 @@ unsigned char * cadenaAntesDeUnSaltoDeLineaUnsigned(unsigned char * arrayCaracte
 
 void addACadena(char ** arrayAAgregar, char charAAgregar, int * tamArreglo)
 {
-  if(*tamArreglo == 0)
-    (*arrayAAgregar) = malloc(sizeof(char) * (++(*tamArreglo)));
+  if((*tamArreglo) == 0)
+  {
+    (*arrayAAgregar) = (char *) malloc(sizeof(char) * (++(*tamArreglo)));
+    if((*arrayAAgregar) == NULL)
+      exit(-1);
+	(*arrayAAgregar)[(*tamArreglo) - 1] = charAAgregar;
+  }
   else
   {
-    tamArreglo++;
-    (*arrayAAgregar) = realloc(arrayAAgregar, *tamArreglo);
+    (*tamArreglo)++;
+    (*arrayAAgregar) = realloc(*arrayAAgregar, *tamArreglo);
+    if((*arrayAAgregar) == NULL)
+      exit(-1);
     (*arrayAAgregar)[(*tamArreglo) - 1] = charAAgregar;
   }
 }
