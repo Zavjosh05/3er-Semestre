@@ -3,10 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "Descomprimir.h"
+#include "huffman.h"
 
 int obtenerRuta(char ** rutaSinNombreArchivo, char ** nombreArchivo, char ** extension);
-#include "huffman.h"
+int comprobarCadena(char * arrayCaracteresArchivo, int numCaracteresArchivo, char * palabraABuscar);
 
 /*
  * Debemos tener los siguientes argumentos -lgdi32 -lcomdlg32
@@ -15,13 +15,26 @@ int obtenerRuta(char ** rutaSinNombreArchivo, char ** nombreArchivo, char ** ext
 
 int main()
 {
-  char * rutaSinNombreArchivo;
-  char * nombreArchivo;
-  char * extension;
-  if(obtenerRuta(&rutaSinNombreArchivo, &nombreArchivo, &extension))
-  	printf("La ruta es: %s%s%	s\n", rutaSinNombreArchivo, nombreArchivo, extension);
-  unsigned a = 255;
+	char * rutaSinNombreArchivo;
+	char * nombreArchivo;
+	char * extension;
+	char * nombreArchivoConExtension;
+	char * nombreArchivoFrecuencias;
+	FILE * entrada, * salida, * frecuencias;
+	if(!obtenerRuta(&rutaSinNombreArchivo, &nombreArchivo, &extension))
+	{
+		printf("Fin del programa papus\n");
+		exit(0);
+	}
+	if (comprobarCadena(extension,(int)strlen(extension),".dat"))
+	{
 
+	}
+	else
+		codificacionHuffman(rutaSinNombreArchivo, nombreArchivo, extension);
+
+	unsigned a = 255;
+	return 0;
 }
 
 /**
@@ -97,4 +110,23 @@ int obtenerRuta(char ** rutaSinNombreArchivo, char ** nombreArchivo, char ** ext
 
 		return 0;
 	}
+}
+
+/**
+* Comprueba si la cadena palabraBuscar está en la cadena arrayCaracteresArchivo
+*
+* @param arrayCaracteresArchivo Cadena donde se busca
+* @param numCaracteresArchivo Tamaño de la de cadena donde se busca
+* @param palabraABuscar Palabra donde que se busca
+* @return se enviara 1 o 0 dependiendo si la cadena está en la cadena a buscar
+*/
+int comprobarCadena(char * arrayCaracteresArchivo, int numCaracteresArchivo, char * palabraABuscar)
+{
+	int contador = 0;
+	for(int i = 0; i < numCaracteresArchivo && palabraABuscar[i] != '\0'; i++)
+		if(arrayCaracteresArchivo[i] == palabraABuscar[i])
+			contador++;
+	if(contador == strlen(palabraABuscar))
+		return 1;
+	return 0;
 }

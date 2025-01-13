@@ -3,6 +3,6 @@
 
 int verificacionDat(char*);
 void nombreDelArchivoComprimido(char*);
-void codificacionHuffman(FILE *fuente, FILE *destino);
+void codificacionHuffman(char * rutaSinNombreArchivo, char * nombreArchivo, char * extension);
 
 #endif //HUFFMAN_H
