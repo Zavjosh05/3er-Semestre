@@ -32,6 +32,27 @@ unsigned char * obtenerElementosDeArchivo(FILE *archivo, int *numeroDeElementos)
     return elem;
 }
 
+unsigned char * obtenerElementosDeArchivoBin(FILE *archivo, int *numeroDeElementos)
+{
+    unsigned char *elem;
+    int c, j;
+
+    *numeroDeElementos = numeroDeElementosEnArchivo(archivo);
+    printf("num: %d\n",*numeroDeElementos);
+
+    elem = (unsigned char*)calloc(*numeroDeElementos, sizeof(char));
+
+    if(elem == NULL)
+        return NULL;
+
+    rewind(archivo);
+    fread(elem, sizeof(unsigned char), *numeroDeElementos, archivo);
+    elem[*numeroDeElementos] = '\0';
+    printf("%s\n", elem);
+
+    return elem;
+}
+
 int escribirArchivoNormal(FILE *archivoDestino, unsigned char *cadena, int tamCadena)
 {
   	if(cadena == NULL || tamCadena == 0 || cadena == NULL)

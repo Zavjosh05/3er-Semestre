@@ -18,6 +18,7 @@ int main()
 	char * rutaSinNombreArchivo;
 	char * nombreArchivo;
 	char * extension;
+
 	if(!obtenerRuta(&rutaSinNombreArchivo, &nombreArchivo, &extension))
 	{
 		printf("Fin del programa papus\n");

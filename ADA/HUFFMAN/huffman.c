@@ -205,8 +205,10 @@ int strncpyJ(unsigned char *destino, unsigned char *fuente, int n)
 void asignarCadenasDeBits(Nodo nodoActual, Caracter *arregloCaracter, int tArr, unsigned char **arregloDeBits, int len)
 {
   	int pos;
-	unsigned char *arrBits;
-
+	unsigned char *arrBits = NULL;
+    printf("arr1: %p\n", arregloCaracter);
+	printf("arr2: %p\n",*arregloDeBits);
+    printf("NodoAct: %c\n",nodoActual->elemento->elem);
 	if(nodoActual->elemento->elem == '\0')
 	{
         *arregloDeBits = (unsigned char*)realloc(*arregloDeBits, (len+1)*sizeof(unsigned char));
@@ -241,19 +243,27 @@ Caracter* generarTablaDeEquivalencias(unsigned char *elementosDelArchivo, int nu
     Caracter *arregloCaracter, temp;
     Nodo arbol;
     int i, tArr;
-    unsigned char **arregloDeBits;
+    unsigned char **arregloDeBits = NULL;
 
 	arregloDeBits = (unsigned char**)calloc(1, sizeof(unsigned char*));
 	if(arregloDeBits == NULL) exit(-1);
     *arregloDeBits = (unsigned char*)calloc(1, sizeof(unsigned char));
     if(*arregloDeBits == NULL) exit(-1);
 
+    puts("arregloDeCaracterUni");
     arregloCaracter= arregloDeCaractersUnicos(elementosDelArchivo,numeroDeElementos,&tArr);
+    puts("ordenamiento");
     ordenarArregloDeCaracteresAsc(arregloCaracter,tArr);
+    puts("arbol");
     arbol = generarArbolDeNodos(arregloCaracter,tArr);
+    puts("AsignarCadenasDeBits");
+    //imprimirArregloDeCaracter(arregloCaracter,tArr);
+    printf("arr1: %p\n",arregloCaracter);
 	asignarCadenasDeBits(arbol, arregloCaracter,tArr,arregloDeBits,0);
+    puts("despues");
 	free(*arregloDeBits);
     free(arregloDeBits);
+    puts("liberando bits");
     ordenarArregloDeCaracteresDsc(arregloCaracter,tArr);
     *numeroDeCaracteres = tArr;
 
@@ -265,7 +275,7 @@ unsigned char* generarCodificacoDelContenido(Caracter *tablaDeEquivalencias, int
                                              int *tamContenidoCodificado)
 {
 	int i, j, pos, ind = 0;
-	unsigned char *contenidoCodificado;
+	unsigned char *contenidoCodificado = NULL;
     Caracter temp;
 
     *tamContenidoCodificado = 0;
@@ -287,7 +297,7 @@ unsigned char* generarCodificacoDelContenido(Caracter *tablaDeEquivalencias, int
 
 unsigned char* contenidoCodificadoABits(unsigned char * contenidoCodificado, int tamContenido, int *tamContenidoBinario)
 {
-	unsigned char * contenidoBinario;
+	unsigned char * contenidoBinario = NULL;
     int i, j, ind, cuenta, numeroDeBits, numeroDeResiduos;
 
     *tamContenidoBinario = 0;
@@ -344,7 +354,7 @@ unsigned char* cadenaDeTablaDeEquivalencias(Caracter *tablaDeEquivalencias, int 
                                             char * nombreDelArchivo, char * extension)
 {
 	int i, j, ind, iInicio, iFin, iExtencio, iNom;
-    unsigned char *cadenaDeTablaDeEquivalencias;
+    unsigned char *cadenaDeTablaDeEquivalencias = NULL;
     char inicio[] = "INICIO", fin[] = "FIN";
 
     for(i = 0; i < tamTabla; i++)
@@ -417,16 +427,21 @@ void codificacionHuffman(char * rutaSinNombreArchivo, char * nombreArchivo, char
 	rutaDestino = concaternarRutaNombreYExtension(rutaSinNombreArchivo,nombreArchivo, ".dat", &tamDestino);
 	rutaFrecuencia = concaternarRutaNombreYExtension(rutaSinNombreArchivo,nombreArchivo, "f.txt", &tamFrecuencia);
 
-    fuente = fopen(rutaFuente, "r");
+    fuente = fopen(rutaFuente, "rb");
     if(fuente == NULL) exit(-1);
     destino = fopen(rutaDestino, "wb");
     if(destino == NULL) exit(-1);
     frecuencia = fopen(rutaFrecuencia, "w+");
     if(frecuencia == NULL) exit(-1);
 
-    elementosDelArchivo = obtenerElementosDeArchivo(fuente,&numDeElementos);
+    puts("obtenerelementosArchivo");
+    elementosDelArchivo = obtenerElementosDeArchivoBin(fuente,&numDeElementos);
+    printf("%s",elementosDelArchivo);
+    puts("generarTablaDeEquivalencias");
     arregloDeCaracteres = generarTablaDeEquivalencias(elementosDelArchivo, numDeElementos, &numDeCaracteres);
+    puts("impresion");
     imprimirArregloDeCaracter(arregloDeCaracteres, numDeCaracteres);
+    puts("generarCodficcion");
 	contenidoCodificado = generarCodificacoDelContenido(arregloDeCaracteres, numDeCaracteres, elementosDelArchivo,
                                                         numDeElementos,&tamContenidoCodificado);
     puts("hola");
