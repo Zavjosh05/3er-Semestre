@@ -285,6 +285,11 @@ unsigned char* generarCodificacoDelContenido(Caracter *tablaDeEquivalencias, int
     return contenidoCodificado;
 }
 
+unsigned char* contenidoCodificadoABits(unsigned char * contenidoCodificado, int tamContenido, int *tam)
+{
+
+}
+
 unsigned char* cadenaDeTablaDeEquivalencias(Caracter *tablaDeEquivalencias, int tamTabla, int *tamTablaCadena)
 {
 	int i, j, ind, iInicio, iFin, iExtencio, iNom;
@@ -309,11 +314,6 @@ unsigned char* cadenaDeTablaDeEquivalencias(Caracter *tablaDeEquivalencias, int 
     printf("ind: %d, tamTablaCadena: %d\n",ind, *tamTablaCadena);
 
 	return cadenaDeTablaDeEquivalencias;
-}
-
-unsigned char* cadenaConTablaY(unsigned char *tablaDeEquivalencias, unsigned char *contenidoDelArchivoCodificado)
-{
-
 }
 
 char * concaternarRutaNombreYExtension(char * rutaSinNombreArchivo, char * nombreArchivo, char * extension, int *tamRuta)
@@ -372,9 +372,8 @@ void codificacionHuffman(char * rutaSinNombreArchivo, char * nombreArchivo, char
     printf("contenidoCodificado: %s\n",contenidoCodificado);
     printf("cadenaDeTabla: \n%s\n",cadenaDeTabla);
     fclose(fuente);
-
     escribirArchivoNormal(frecuencia, cadenaDeTabla, numCadenaDeTabla);
-
+	fclose(frecuencia);
 
 }
 
