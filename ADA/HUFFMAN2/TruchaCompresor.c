@@ -1,24 +1,15 @@
 #include <windows.h>
 #include <commdlg.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "huffman.h"
-#include "Descomprimir.h"
 
 int obtenerRuta(char ** rutaSinNombreArchivo, char ** nombreArchivo, char ** extension);
 int comprobarCadena(char * arrayCaracteresArchivo, int numCaracteresArchivo, char * palabraABuscar);
 
-/*
- * Debemos tener los siguientes argumentos -lgdi32 -lcomdlg32
- *
- * */
-
 int main()
 {
-	char * rutaSinNombreArchivo;
-	char * nombreArchivo;
-	char * extension;
+	char * rutaSinNombreArchivo = NULL;
+	char * nombreArchivo = NULL;
+	char * extension = NULL;
 
 	if(!obtenerRuta(&rutaSinNombreArchivo, &nombreArchivo, &extension))
 	{
@@ -26,10 +17,13 @@ int main()
 		exit(0);
 	}
 	if (comprobarCadena(extension,(int)strlen(extension),".dat"))
-		descomprimir(rutaSinNombreArchivo, nombreArchivo, extension);
+    printf("\nExtension .dat\n");
 	else
-		codificacionHuffman(rutaSinNombreArchivo, nombreArchivo, extension);
+		printf("\nExtension %s\n", extension);
 
+  free(rutaSinNombreArchivo);
+  free(nombreArchivo);
+  free(extension);
 	return 0;
 }
 
@@ -66,8 +60,8 @@ int obtenerRuta(char ** rutaSinNombreArchivo, char ** nombreArchivo, char ** ext
 		int tamRutaSinNombreArchivo = strlen(ofn.lpstrFile) - strlen(ofn.lpstrFileTitle);
 		int tamNombreArchivo = strlen(ofn.lpstrFileTitle);
 
-		*rutaSinNombreArchivo = malloc(sizeof(char) * (tamRutaSinNombreArchivo));
-		*nombreArchivo = malloc(sizeof(char) * (tamNombreArchivo));
+		(*rutaSinNombreArchivo) = malloc(sizeof(char) * (tamRutaSinNombreArchivo));
+		(*nombreArchivo) = malloc(sizeof(char) * (tamNombreArchivo));
 
 		if(*rutaSinNombreArchivo == NULL || *nombreArchivo == NULL)
 			exit(-1);
@@ -83,9 +77,10 @@ int obtenerRuta(char ** rutaSinNombreArchivo, char ** nombreArchivo, char ** ext
       (*nombreArchivo)[i] = ofn.lpstrFileTitle[i];
     }
 		(*nombreArchivo)[i] = '\0';
+
 		int tamExtension = tamNombreArchivo - i;
 
-		*extension = malloc(sizeof(char) * (tamExtension));
+		(*extension) = malloc(sizeof(char) * (tamExtension));
 		if(*extension == NULL)
 			exit(-1);
 
@@ -93,17 +88,16 @@ int obtenerRuta(char ** rutaSinNombreArchivo, char ** nombreArchivo, char ** ext
 
 		int x = 0;
 
-		for(j = i; j < tamNombreArchivo; j++)
+		for(; i < tamNombreArchivo; i++)
 		{
-      (*extension)[x] = ofn.lpstrFileTitle[j];
+      (*extension)[x] = ofn.lpstrFileTitle[i];
 			x++;
 		}
-    (*extension)[j] = '\0';
+    (*extension)[x] = '\0';
 		return 1;
 	} else
 	{
 		printf("No se selecciono ningun archivo o se cancelo.\n");
-
 		return 0;
 	}
 }

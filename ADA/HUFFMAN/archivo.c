@@ -20,7 +20,7 @@ unsigned char * obtenerElementosDeArchivo(FILE *archivo, int *numeroDeElementos)
 
     *numeroDeElementos = numeroDeElementosEnArchivo(archivo);
 
-    elem = (unsigned char*)calloc(*numeroDeElementos, sizeof(char));
+    elem = (unsigned char*)calloc(*numeroDeElementos, sizeof(unsigned char));
 
     if(elem == NULL)
         return NULL;
