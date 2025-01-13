@@ -83,7 +83,7 @@ int busquedaLinealDeElemento(Caracter *arreglo, int tArreglo, unsigned char elem
 */
 Caracter *arregloDeCaractersUnicos(unsigned char *elementosDelArchivo, int numeroDeElementos, int *tArr)
 {
-    if(elementosDelArchivo == NULL || numeroDeElementos <= 0 || *tArr == 0) return NULL;
+    if(elementosDelArchivo == NULL || numeroDeElementos <= 0) return NULL;
 
     int i, ind;
     Caracter *arr, temp = NULL;
@@ -168,7 +168,7 @@ Nodo* caracteresANodos(Caracter *arreglo, int tArr)
 Nodo generarArbolDeNodos(Caracter *arreglo, int tArr)
 {
     Nodo *arregloNodo, padre;
-
+	printf("tArr: %d\n",tArr);
     arregloNodo = caracteresANodos(arreglo, tArr);
 	printf("imprimir arreglo de Nodos\n:");
     imprimirArregloDeNodo(arregloNodo,tArr);
@@ -255,12 +255,11 @@ Caracter* generarTablaDeEquivalencias(unsigned char *elementosDelArchivo, int nu
 
 	arregloDeBits = (unsigned char**)malloc(sizeof(unsigned char*));
 	if(arregloDeBits == NULL) exit(-1);
-    *arregloDeBits = (unsigned char*)calloc(1, sizeof(unsigned char));
+    (*arregloDeBits) = (unsigned char*)malloc(sizeof(unsigned char));
     if(*arregloDeBits == NULL) exit(-1);
 
     puts("arregloDeCaracterUni");
     arregloCaracter= arregloDeCaractersUnicos(elementosDelArchivo,numeroDeElementos,&tArr);
-    int tArr2 = tArr;
     puts("ordenamiento");
     printf("1tArr = %d\n",tArr);
     ordenarArregloDeCaracteresAsc(arregloCaracter,tArr);
@@ -473,6 +472,13 @@ void codificacionHuffman(char * rutaSinNombreArchivo, char * nombreArchivo, char
 //      	printf("%d ",cadenaDeBits[i]);
 //
 //    escribirArchivoBinario(destino, cadenaDeBits, numCadenaDeBits);
+    free(rutaFuente);
+    free(rutaDestino);
+    free(rutaFrecuencia);
+    free(elementosDelArchivo);
+    free(contenidoCodificado);
+    free(cadenaDeTabla);
+    free(cadenaDeBits);
 }
 
 
