@@ -62,7 +62,8 @@ int numeroDeElementosDeUnArreglo(char *arr)
 */
 int busquedaLinealDeElemento(Caracter *arreglo, int tArreglo, unsigned char elemento)
 {
-    if(arreglo == NULL || tArreglo == 0) return 0;
+    if(arreglo == NULL || tArreglo == 0)
+    	return 0;
 
     int i;
     for(i = 0; i < tArreglo; i++)
@@ -72,7 +73,7 @@ int busquedaLinealDeElemento(Caracter *arreglo, int tArreglo, unsigned char elem
     return 0;
 }
 
-/*
+/**
 * Funcion que devuelve un arreglo de la estructura Caracteres con cada caracter unico, asignando tambien su
 * frecuencia de aparicion en el arreglo proporcionado
 * @param elementosDelArchivo arreglo que queremos recorrer
@@ -81,30 +82,31 @@ int busquedaLinealDeElemento(Caracter *arreglo, int tArreglo, unsigned char elem
 */
 Caracter *arregloDeCaractersUnicos(unsigned char *elementosDelArchivo, int numeroDeElementos, int *tArr)
 {
-    if(elementosDelArchivo == NULL || numeroDeElementos <= 0) return NULL;
+    if(elementosDelArchivo == NULL || numeroDeElementos <= 0 || *tArr == 0) return NULL;
 
     int i, ind;
-    Caracter *arr, temp;
-    *tArr = 0;
+    Caracter *arr, temp = NULL;
 
+    *tArr = 0;
+    arr = (Caracter*)calloc(1, sizeof(Caracter));
     for(i = 0; i < numeroDeElementos; i++)
     {
         ind = busquedaLinealDeElemento(arr,*tArr,elementosDelArchivo[i]);
         if(!ind)
         {
             crearCaracter(&temp);
-            if(*tArr == 0)
-                arr = (Caracter*)calloc(1, sizeof(Caracter));
-            else
+            if(*tArr > 0)
                 arr = (Caracter*)realloc(arr,sizeof(Caracter)*(*tArr+1));
             temp->elem = elementosDelArchivo[i];
             temp->frecuencia += 1;
             arr[*tArr] = temp;
+            temp = NULL;
             *tArr += 1;
         }
         else
             arr[ind - 1]->frecuencia  += 1;
     }
+    printf("\n\nobtencion de tArr: %d\n\n",*tArr);
 
     return arr;
 }
@@ -139,16 +141,21 @@ Nodo* caracteresANodos(Caracter *arreglo, int tArr)
 {
     Nodo *arregloNodo, temp;
     int i;
-
+	puts("Holan");
     arregloNodo = (Nodo*)calloc(tArr, sizeof(Nodo));
+    	puts("Holan");
+
 
     for(i = 0; i < tArr; i++)
     {
         crearNodo(&temp);
         temp->elemento = arreglo[i];
         arregloNodo[i] = temp;
+        temp = NULL;
     }
 
+    printf("imprimiendo arreglo de nodos dentro de f, numElem: %d\n",tArr);
+	imprimirArregloDeNodo(arregloNodo,tArr);
     return arregloNodo;
 }
 
@@ -160,10 +167,10 @@ Nodo* caracteresANodos(Caracter *arreglo, int tArr)
 Nodo generarArbolDeNodos(Caracter *arreglo, int tArr)
 {
     Nodo *arregloNodo, padre;
-    char *cadena;
 
     arregloNodo = caracteresANodos(arreglo, tArr);
-
+	printf("imprimir arreglo de Nodos\n:");
+    imprimirArregloDeNodo(arregloNodo,tArr);
 
     while(tArr > 1)
     {
@@ -245,27 +252,32 @@ Caracter* generarTablaDeEquivalencias(unsigned char *elementosDelArchivo, int nu
     int i, tArr;
     unsigned char **arregloDeBits = NULL;
 
-	arregloDeBits = (unsigned char**)calloc(1, sizeof(unsigned char*));
+	arregloDeBits = (unsigned char**)malloc(sizeof(unsigned char*));
 	if(arregloDeBits == NULL) exit(-1);
     *arregloDeBits = (unsigned char*)calloc(1, sizeof(unsigned char));
     if(*arregloDeBits == NULL) exit(-1);
 
     puts("arregloDeCaracterUni");
     arregloCaracter= arregloDeCaractersUnicos(elementosDelArchivo,numeroDeElementos,&tArr);
+    int tArr2 = tArr;
     puts("ordenamiento");
+    printf("1tArr = %d\n",tArr);
     ordenarArregloDeCaracteresAsc(arregloCaracter,tArr);
+    imprimirArregloDeCaracter(arregloCaracter,tArr);
+    printf("\nImprimo para estar seguro %s.\n", elementosDelArchivo);
     puts("arbol");
+    printf("\ntArr2 = %d\n",tArr);
     arbol = generarArbolDeNodos(arregloCaracter,tArr);
-    puts("AsignarCadenasDeBits");
-    //imprimirArregloDeCaracter(arregloCaracter,tArr);
-    printf("arr1: %p\n",arregloCaracter);
-	asignarCadenasDeBits(arbol, arregloCaracter,tArr,arregloDeBits,0);
-    puts("despues");
-	free(*arregloDeBits);
-    free(arregloDeBits);
-    puts("liberando bits");
-    ordenarArregloDeCaracteresDsc(arregloCaracter,tArr);
-    *numeroDeCaracteres = tArr;
+//    puts("AsignarCadenasDeBits");
+//    //imprimirArregloDeCaracter(arregloCaracter,tArr);
+//    printf("arr1: %p\n",arregloCaracter);
+//	asignarCadenasDeBits(arbol, arregloCaracter,tArr,arregloDeBits,0);
+//    puts("despues");
+//	free(*arregloDeBits);
+//    free(arregloDeBits);
+//    puts("liberando bits");
+//    ordenarArregloDeCaracteresDsc(arregloCaracter,tArr);
+//    *numeroDeCaracteres = tArr;
 
     return arregloCaracter;
 
@@ -429,36 +441,37 @@ void codificacionHuffman(char * rutaSinNombreArchivo, char * nombreArchivo, char
 
     fuente = fopen(rutaFuente, "rb");
     if(fuente == NULL) exit(-1);
-    destino = fopen(rutaDestino, "wb");
-    if(destino == NULL) exit(-1);
-    frecuencia = fopen(rutaFrecuencia, "w+");
-    if(frecuencia == NULL) exit(-1);
+//    destino = fopen(rutaDestino, "wb");
+//    if(destino == NULL) exit(-1);
+//    frecuencia = fopen(rutaFrecuencia, "w+");
+//    if(frecuencia == NULL) exit(-1);
 
     puts("obtenerelementosArchivo");
     elementosDelArchivo = obtenerElementosDeArchivoBin(fuente,&numDeElementos);
-    printf("%s",elementosDelArchivo);
+    printf("cadena: %s, numElem: %d\n",elementosDelArchivo, numDeElementos);
+    fclose(fuente);
     puts("generarTablaDeEquivalencias");
     arregloDeCaracteres = generarTablaDeEquivalencias(elementosDelArchivo, numDeElementos, &numDeCaracteres);
-    puts("impresion");
-    imprimirArregloDeCaracter(arregloDeCaracteres, numDeCaracteres);
-    puts("generarCodficcion");
-	contenidoCodificado = generarCodificacoDelContenido(arregloDeCaracteres, numDeCaracteres, elementosDelArchivo,
-                                                        numDeElementos,&tamContenidoCodificado);
-    puts("hola");
-    cadenaDeTabla = cadenaDeTablaDeEquivalencias(arregloDeCaracteres, numDeCaracteres, &numCadenaDeTabla,
-                                                     nombreArchivo, extension);
-    printf("contenidoCodificado: %s, %d\n",contenidoCodificado, tamContenidoCodificado);
-    printf("cadenaDeTabla: \n%s\n",cadenaDeTabla);
-    fclose(fuente);
-    escribirArchivoNormal(frecuencia, cadenaDeTabla, numCadenaDeTabla);
-	fclose(frecuencia);
-    cadenaDeBits = contenidoCodificadoABits(contenidoCodificado, tamContenidoCodificado, &numCadenaDeBits);
-    printf("numCadenaDeBits: %d\n", numCadenaDeBits);
-    printf("cadena de Bits: %s\ncadena de Bits:\t", cadenaDeBits);
-    for(int i = 0; i < numCadenaDeBits; i++)
-      	printf("%d ",cadenaDeBits[i]);
-
-    escribirArchivoBinario(destino, cadenaDeBits, numCadenaDeBits);
+//    puts("impresion");
+//    imprimirArregloDeCaracter(arregloDeCaracteres, numDeCaracteres);
+//    puts("generarCodficcion");
+//	contenidoCodificado = generarCodificacoDelContenido(arregloDeCaracteres, numDeCaracteres, elementosDelArchivo,
+//                                                        numDeElementos,&tamContenidoCodificado);
+//    puts("hola");
+//    cadenaDeTabla = cadenaDeTablaDeEquivalencias(arregloDeCaracteres, numDeCaracteres, &numCadenaDeTabla,
+//                                                     nombreArchivo, extension);
+//    printf("contenidoCodificado: %s, %d\n",contenidoCodificado, tamContenidoCodificado);
+//    printf("cadenaDeTabla: \n%s\n",cadenaDeTabla);
+//    fclose(fuente);
+//    escribirArchivoNormal(frecuencia, cadenaDeTabla, numCadenaDeTabla);
+//	fclose(frecuencia);
+//    cadenaDeBits = contenidoCodificadoABits(contenidoCodificado, tamContenidoCodificado, &numCadenaDeBits);
+//    printf("numCadenaDeBits: %d\n", numCadenaDeBits);
+//    printf("cadena de Bits: %s\ncadena de Bits:\t", cadenaDeBits);
+//    for(int i = 0; i < numCadenaDeBits; i++)
+//      	printf("%d ",cadenaDeBits[i]);
+//
+//    escribirArchivoBinario(destino, cadenaDeBits, numCadenaDeBits);
 }
 
 
