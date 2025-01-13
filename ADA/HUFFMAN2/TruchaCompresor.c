@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <commdlg.h>
 #include <stdio.h>
+#include "huffman.h"
 
 int obtenerRuta(char ** rutaSinNombreArchivo, char ** nombreArchivo, char ** extension);
 int comprobarCadena(char * arrayCaracteresArchivo, int numCaracteresArchivo, char * palabraABuscar);
@@ -19,7 +20,7 @@ int main()
 	if (comprobarCadena(extension,(int)strlen(extension),".dat"))
     printf("\nExtension .dat\n");
 	else
-		printf("\nExtension %s\n", extension);
+		codificacionHuffman(rutaSinNombreArchivo, nombreArchivo, extension);
 
   free(rutaSinNombreArchivo);
   free(nombreArchivo);
