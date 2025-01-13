@@ -297,10 +297,11 @@ unsigned char* contenidoCodificadoABits(unsigned char * contenidoCodificado, int
     ind = 0;
 	printf("numeroDeBits = %d, numeroDeResiduos = %d\n", numeroDeBits, numeroDeResiduos);
     if(numeroDeResiduos)
-    	contenidoBinario = (unsigned char*)calloc(numeroDeBits+1, sizeof(unsigned char));
+    	contenidoBinario = (unsigned char*)calloc(++numeroDeBits, sizeof(unsigned char));
     else
     	contenidoBinario = (unsigned char*)calloc(numeroDeBits, sizeof(unsigned char));
 
+    printf("numeroDeBits = %d, numeroDeResiduos = %d\n", numeroDeBits, numeroDeResiduos);
     *tamContenidoBinario = numeroDeBits;
 
     for(i = 0; i < numeroDeBits;i++)
@@ -310,10 +311,13 @@ unsigned char* contenidoCodificadoABits(unsigned char * contenidoCodificado, int
         	for(j = 0; j < 8; j++)
         	{
             	if(numeroDeResiduos)
+                {
                 	if(contenidoCodificado[ind++] == '0')
                 		contenidoBinario[i] &= ~(1 << cuenta);
                 	else
                 		contenidoBinario[i] |= (1 << cuenta);
+                    numeroDeResiduos--;
+                }
                 else
                 	contenidoBinario[i] &= ~(1 << cuenta);
                 cuenta--;
@@ -428,7 +432,7 @@ void codificacionHuffman(char * rutaSinNombreArchivo, char * nombreArchivo, char
     puts("hola");
     cadenaDeTabla = cadenaDeTablaDeEquivalencias(arregloDeCaracteres, numDeCaracteres, &numCadenaDeTabla,
                                                      nombreArchivo, extension);
-    printf("contenidoCodificado: %s\n",contenidoCodificado);
+    printf("contenidoCodificado: %s, %d\n",contenidoCodificado, tamContenidoCodificado);
     printf("cadenaDeTabla: \n%s\n",cadenaDeTabla);
     fclose(fuente);
     escribirArchivoNormal(frecuencia, cadenaDeTabla, numCadenaDeTabla);
@@ -437,8 +441,9 @@ void codificacionHuffman(char * rutaSinNombreArchivo, char * nombreArchivo, char
     printf("numCadenaDeBits: %d\n", numCadenaDeBits);
     printf("cadena de Bits: %s\ncadena de Bits:\t", cadenaDeBits);
     for(int i = 0; i < numCadenaDeBits; i++)
-      	printf("0b%08b",cadenaDeBits[i]);
+      	printf("%d ",cadenaDeBits[i]);
 
+    escribirArchivoBinario(destino, cadenaDeBits, numCadenaDeBits);
 }
 
 

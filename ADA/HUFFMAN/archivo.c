@@ -50,10 +50,7 @@ int escribirArchivoBinario(FILE *archivoDestino, unsigned char *cadena, int tamC
   	if(cadena == NULL || tamCadena == 0 || cadena == NULL)
           return 0;
 
-	int i;
-
-    for(i = 0; i < tamCadena; i++)
-		fputc(cadena[i], archivoDestino);
+	fwrite(cadena, sizeof(unsigned char), tamCadena, archivoDestino);
 
     return 1;
 }
