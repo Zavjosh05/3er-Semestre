@@ -1,28 +1,60 @@
+#include "Descomprimir.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "archivo.h"
 #include <string.h>
-#include "Descomprimir.h"
+#include "Nodo.h"
 
 void descomprimir(char * rutaArchivo, char * nombreArchivo, char * extension)
 {
-  FILE * archivo = fopen(nombreArchivo, "r");
-  char * arrayCaracteresArchivo, * nombreDelArchivo;
-  int numCaracteresArchivo, posicionActual = 0;
+  char * rutaCompleta = malloc(sizeof(char));
 
+  strcat(rutaCompleta, rutaArchivo);
+  strcat(rutaCompleta, nombreArchivo);
+  strcat(rutaCompleta, "f");
+  strcat(rutaCompleta, ".txt");
 
-  arrayCaracteresArchivo = obtenerElementosDeArchivo(archivo, &numCaracteresArchivo);
-
-  if(!comprobarCadenaEsta(arrayCaracteresArchivo, numCaracteresArchivo, "INICIO", &posicionActual))
+  FILE * archivoTablaFrecuencias = fopen(rutaCompleta, "r");
+  if (archivoTablaFrecuencias == NULL)
   {
-    printf("\aEl .dat ingresado no es el generado por TRUCHA CORPORATION\n");
+    printf("\nNo es encuentra la tabla de equivalencias, favor de agregar el archivo %sf.txt\n", nombreArchivo);
     exit(-1);
   }
-  nombreDelArchivo = cadenaAntesDeUnSaltoDeLinea(arrayCaracteresArchivo, numCaracteresArchivo, &posicionActual);
 
+  unsigned char * arrayCaracteresArchivoFrecuencias;
+
+  char * nombreDelArchivoDescomprimido, * extensionDescomprimido;
+
+  int numCaracteresArchivoFrecuencias = 0, posicionActual = 0, tamArrayCaracteres = 0;
+
+  Caracter * arrayCaracteres;
+
+  arrayCaracteresArchivoFrecuencias = obtenerElementosDeArchivo(archivoTablaFrecuencias, &numCaracteresArchivoFrecuencias);
+
+  if(!comprobarCadenaEsta(arrayCaracteresArchivoFrecuencias, numCaracteresArchivoFrecuencias, "INICIO", &posicionActual))
+  {
+    printf("\aEl .txt relacionado con este archivo comprimido no es el generado por TRUCHA CORPORATION\n");
+    exit(-1);
+  }
+
+  nombreDelArchivoDescomprimido = cadenaAntesDeUnSaltoDeLinea(arrayCaracteresArchivoFrecuencias, numCaracteresArchivoFrecuencias, &posicionActual);
+
+  llenarArrayCaracteres(arrayCaracteresArchivoFrecuencias, numCaracteresArchivoFrecuencias, &posicionActual, &arrayCaracteres, &tamArrayCaracteres);
+
+  extensionDescomprimido = cadenaAntesDeUnSaltoDeLinea(arrayCaracteresArchivoFrecuencias, numCaracteresArchivoFrecuencias, &posicionActual);
+
+  char * rutaCompletaDescomprimido = malloc(sizeof(char));
+
+  strcat(rutaCompletaDescomprimido, rutaArchivo);
+  strcat(rutaCompletaDescomprimido, nombreArchivo);
+  strcat(rutaCompletaDescomprimido, "Descomprimido");
+  strcat(rutaCompletaDescomprimido, extensionDescomprimido);
+
+  FILE * archivoDescomprimido = fopen(rutaCompletaDescomprimido, "w");
+  
 }
 
-int comprobarCadenaEsta(char * arrayCaracteresArchivo, int numCaracteresArchivo, char * palabraABuscar, int * numAEmpezar)
+int comprobarCadenaEsta(unsigned char * arrayCaracteresArchivo, int numCaracteresArchivo, char * palabraABuscar, int * numAEmpezar)
 {
   int contador = 0;
   for(int i = (*numAEmpezar); i < numCaracteresArchivo && palabraABuscar[i] != '\0'; (*numAEmpezar)++)
@@ -35,13 +67,25 @@ int comprobarCadenaEsta(char * arrayCaracteresArchivo, int numCaracteresArchivo,
   return 0;
 }
 
-char * cadenaAntesDeUnSaltoDeLinea(char * arrayCaracteresArchivo, int numCaracteresArchivo, int * numAEmpezar)
+char * cadenaAntesDeUnSaltoDeLinea(unsigned char * arrayCaracteresArchivo, int numCaracteresArchivo, int * numAEmpezar)
 {
   char * cadenaCreada;
   int numAmpezarCopia = *numAEmpezar, tamCadenaCreada = 0, i = 0;
   for(i = numAmpezarCopia; i < numCaracteresArchivo && arrayCaracteresArchivo[i] != '\n'; (*numAEmpezar)++)
     addACadena(&cadenaCreada, arrayCaracteresArchivo[i], &tamCadenaCreada);
   cadenaCreada[i] = '\0';
+  i++;
+  return cadenaCreada;
+}
+
+unsigned char * cadenaAntesDeUnSaltoDeLineaUnsigned(unsigned char * arrayCaracteresArchivo, int numCaracteresArchivo, int * numAEmpezar)
+{
+  unsigned char * cadenaCreada;
+  int numAmpezarCopia = *numAEmpezar, tamCadenaCreada = 0, i = 0;
+  for(i = numAmpezarCopia; i < numCaracteresArchivo && arrayCaracteresArchivo[i] != '\n'; (*numAEmpezar)++)
+    addACadenaUnsigned(&cadenaCreada, arrayCaracteresArchivo[i], &tamCadenaCreada);
+  cadenaCreada[i] = '\0';
+  i++;
   return cadenaCreada;
 }
 
@@ -54,5 +98,70 @@ void addACadena(char ** arrayAAgregar, char charAAgregar, int * tamArreglo)
     tamArreglo++;
     (*arrayAAgregar) = realloc(arrayAAgregar, *tamArreglo);
     (*arrayAAgregar)[(*tamArreglo) - 1] = charAAgregar;
+  }
+}
+
+void addACadenaUnsigned(unsigned char ** arrayAAgregar, char charAAgregar, int * tamArreglo)
+{
+  if(*tamArreglo == 0)
+    (*arrayAAgregar) = malloc(sizeof(unsigned char) * (++(*tamArreglo)));
+  else
+  {
+    tamArreglo++;
+    (*arrayAAgregar) = realloc(arrayAAgregar, *tamArreglo);
+    (*arrayAAgregar)[(*tamArreglo) - 1] = charAAgregar;
+  }
+}
+
+void llenarArrayCaracteres(unsigned char * arrayCaracteresArchivo, int numCaracteresArchivo, int * numAEmpezar, Caracter ** arrayCaracteres, int * tamArrayCaracteres)
+{
+  for(; *(numAEmpezar) < numCaracteresArchivo && !buscarFinTablaEquivalencias(arrayCaracteresArchivo, numCaracteresArchivo, numAEmpezar); (*numAEmpezar)++)
+  {
+    unsigned char caracterAGuardar = arrayCaracteresArchivo[(*numAEmpezar)++];
+    unsigned char * cadenaDeBits = cadenaAntesDeUnSaltoDeLineaUnsigned(arrayCaracteresArchivo, numCaracteresArchivo, numAEmpezar);
+    addAArrayCaracteres((*arrayCaracteres), caracterAGuardar, cadenaDeBits, tamArrayCaracteres);
+  }
+}
+
+int buscarFinTablaEquivalencias(unsigned char * arrayCaracteresArchivo, int numCaracteresArchivo, int * numAEmpezar)
+{
+  int numAEmpezarCopia = *numAEmpezar;
+
+  if(comprobarCadenaEsta(arrayCaracteresArchivo, numCaracteresArchivo, "FIN", &numAEmpezarCopia))
+  {
+    *numAEmpezar = numAEmpezarCopia;
+    return 1;
+  }
+  return 0;
+}
+
+void addAArrayCaracteres(Caracter * arrayAAgregar, unsigned caracter, unsigned char * cadenaEquivalenteBits, int * tamArrayAAgregar)
+{
+  if(*tamArrayAAgregar == 0)
+  {
+    arrayAAgregar = (Caracter *)malloc(sizeof(Caracter) * (++(*tamArrayAAgregar)));
+    if(arrayAAgregar == NULL)
+      exit(-1);
+    arrayAAgregar[(*tamArrayAAgregar) - 1] = (Caracter)malloc(sizeof(t_caracter));
+    if(arrayAAgregar[(*tamArrayAAgregar) - 1] == NULL)
+      exit(-1);
+    arrayAAgregar[(*tamArrayAAgregar) - 1]->elem = caracter;
+    arrayAAgregar[(*tamArrayAAgregar) - 1]->frecuencia = 0;
+    arrayAAgregar[(*tamArrayAAgregar) - 1]->cadenaDeBits = cadenaEquivalenteBits;
+    arrayAAgregar[(*tamArrayAAgregar) - 1]->tamCadena = strlen((char *)cadenaEquivalenteBits);
+  }
+  else
+  {
+    (*tamArrayAAgregar)++;
+    arrayAAgregar = realloc(arrayAAgregar, *tamArrayAAgregar);
+    if(arrayAAgregar == NULL)
+      exit(-1);
+    arrayAAgregar[(*tamArrayAAgregar) - 1] = (Caracter)malloc(sizeof(t_caracter));
+    if(arrayAAgregar[(*tamArrayAAgregar) - 1] == NULL)
+      exit(-1);
+    arrayAAgregar[(*tamArrayAAgregar) - 1]->elem = caracter;
+    arrayAAgregar[(*tamArrayAAgregar) - 1]->frecuencia = 0;
+    arrayAAgregar[(*tamArrayAAgregar) - 1]->cadenaDeBits = cadenaEquivalenteBits;
+    arrayAAgregar[(*tamArrayAAgregar) - 1]->tamCadena = strlen((char *)cadenaEquivalenteBits);
   }
 }

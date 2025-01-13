@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 int numeroDeElementosEnArchivo(FILE *archivo)
 {
@@ -12,7 +13,7 @@ int numeroDeElementosEnArchivo(FILE *archivo)
     return i;
 }
 
-unsigned char* obtenerElementosDeArchivo(FILE *archivo, int *numeroDeElementos)
+unsigned char * obtenerElementosDeArchivo(FILE *archivo, int *numeroDeElementos)
 {
     unsigned char *elem;
     int c, j;

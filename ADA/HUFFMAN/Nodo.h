@@ -5,7 +5,7 @@ typedef struct caracter
 {
     unsigned char elem;
     int frecuencia;
-    char  *cadenaDeBits;
+    unsigned char * cadenaDeBits;
     int tamCadena;
 }*Caracter, t_caracter;
 
