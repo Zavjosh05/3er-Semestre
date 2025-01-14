@@ -8,6 +8,7 @@ int crearNodo(Nodo *node)
 
     (*node)->izq = NULL;
     (*node)->der = NULL;
+    (*node)->esPadre = 0;
 
     if (node == NULL)
       return 0;
@@ -20,6 +21,7 @@ int crearNodoPadre(Nodo *node)
     crearCaracter(&((*node)->elemento));
     (*node)->elemento->elem = '\0';
     (*node)->elemento->frecuencia = 0;
+    (*node)->esPadre = 1;
 
     if (node == NULL || (*node)->elemento == NULL)
       return 0;

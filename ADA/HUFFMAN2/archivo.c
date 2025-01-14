@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "archivo.h"
 
 int numeroDeElementosEnArchivo(FILE *archivo)
@@ -34,19 +35,16 @@ unsigned char * obtenerElementosDeArchivo(FILE *archivo, int *numeroDeElementos)
 
 unsigned char * obtenerElementosDeArchivoBin(FILE *archivo, int *numeroDeElementos)
 {
-    unsigned char *elem;
-    int c, j;
+    unsigned char *elem = NULL;
 
     *numeroDeElementos = numeroDeElementosEnArchivo(archivo);
-    printf("Leer Archivo - num: %d\n",*numeroDeElementos);
 
-    elem = (unsigned char*)calloc(*numeroDeElementos, sizeof(unsigned char));
-
+    elem = (unsigned char*)malloc(sizeof(unsigned char)*(*numeroDeElementos+1));
     if(elem == NULL)
         return NULL;
-
     rewind(archivo);
     fread(elem, sizeof(unsigned char), *numeroDeElementos, archivo);
+    //fgets(elem, *numeroDeElementos, archivo);
     elem[*numeroDeElementos] = '\0';
 
     return elem;
