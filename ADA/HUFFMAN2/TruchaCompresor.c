@@ -18,7 +18,7 @@ int main()
 		exit(0);
 	}
 	if (comprobarCadena(extension,(int)strlen(extension),".dat"))
-		decodificacionHuffman()
+		decodificacionHuffman(rutaSinNombreArchivo, nombreArchivo, extension);
 	else
 		codificacionHuffman(rutaSinNombreArchivo, nombreArchivo, extension);
 

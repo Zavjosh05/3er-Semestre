@@ -356,7 +356,7 @@ unsigned char* contenidoCodificadoABits(unsigned char * contenidoCodificado, int
     return contenidoBinario;
 }
 
-void tablaDeEquivalencias(FILE * frecuencia,Caracter *tablaDeEquivalencias, int tamTabla, int *tamTablaCadena,
+void tablaDeEquivalencias(FILE * frecuencia,Caracter *tablaDeEquivalencias, int tamTabla,
                                             char * nombreDelArchivo, char * extension)
 {
     int i, j;
@@ -364,7 +364,7 @@ void tablaDeEquivalencias(FILE * frecuencia,Caracter *tablaDeEquivalencias, int 
     fprintf(frecuencia, "%s%s\n", nombreDelArchivo,extension);
     for(i = 0; i < tamTabla; i++)
     {
-        fprintf(frecuencia, "%d ", tablaDeEquivalencias[i]->elem);
+        fprintf(frecuencia, "%d\t", tablaDeEquivalencias[i]->elem);
         for(j = 0; j < tablaDeEquivalencias[i]->tamCadena; j++)
             fprintf(frecuencia, "%c", tablaDeEquivalencias[i]->cadenaDeBits[j]);
         fprintf(frecuencia, "\n");
@@ -392,9 +392,36 @@ char * concaternarRutaNombreYExtension(char * rutaSinNombreArchivo, char * nombr
     return ruta;
 }
 
-void decodificacionHuffman()
+void decodificacionHuffman(char * rutaSinNombreArchivo, char * nombreArchivo, char * extension)
 {
+    FILE *fuente = NULL, *destino = NULL, *frecuencia = NULL;
+    Caracter *arregloDeCaracteres;
+    int *elementosDelArchivo = NULL;
+    unsigned char *contenidoCodificado = NULL;
+    char *rutaFuente = NULL, *rutaDestino = NULL, *rutaFrecuencia = NULL, *nomDestino, *nomFrecuencias;
+    int numDeElementos, numDeCaracteres, tamContenidoCodificado, numCadenaDeBits,
+        tamFuente, tamDestino, tamFrecuencia, tamNomDestino;
 
+    tamFrecuencia = (strlen(nombreArchivo)+1);
+    nomFrecuencias = (char*)malloc((tamFrecuencia+1)*sizeof(char));
+    strncpy(nomFrecuencias,nombreArchivo,tamFrecuencia);
+    nomFrecuencias[tamFrecuencia-1] = 'f';
+    nomFrecuencias[tamFrecuencia] = '\0';
+    printf("%s, %d\n", nomFrecuencias, tamFrecuencia);
+
+    rutaFuente = concaternarRutaNombreYExtension(rutaSinNombreArchivo, nombreArchivo, extension, &tamFuente);
+    rutaFrecuencia = concaternarRutaNombreYExtension(rutaSinNombreArchivo, nomFrecuencias, ".txt", &tamFrecuencia);
+
+    fuente = fopen(rutaFuente, "rb");
+    if(fuente == NULL) exit(-1);
+    printf("Ruta Fuente: %s\n", rutaFuente);
+    printf("Ruta Frecuencia: %s\n", rutaFrecuencia);
+    frecuencia = fopen(rutaFrecuencia, "r");
+    if(frecuencia == NULL) exit(-1);
+
+    fscanf(frecuencia, "%s", nomDestino);
+
+    printf("%s\n", nomDestino);
 }
 
 /**
@@ -406,9 +433,9 @@ void codificacionHuffman(char * rutaSinNombreArchivo, char * nombreArchivo, char
 {
     Caracter *arregloDeCaracteres;
     int *elementosDelArchivo = NULL;
-    unsigned char *contenidoCodificado = NULL, *cadenaDeTabla = NULL, *cadenaDeBits = NULL;
+    unsigned char *contenidoCodificado = NULL, *cadenaDeBits = NULL;
     char *rutaFuente = NULL, *rutaDestino = NULL, *rutaFrecuencia = NULL;
-    int numDeElementos, numDeCaracteres, tamContenidoCodificado, numCadenaDeTabla, numCadenaDeBits,
+    int numDeElementos, numDeCaracteres, tamContenidoCodificado, numCadenaDeBits,
         tamFuente, tamDestino, tamFrecuencia;
     FILE *fuente = NULL, *destino = NULL, *frecuencia = NULL;
 
@@ -433,9 +460,9 @@ void codificacionHuffman(char * rutaSinNombreArchivo, char * nombreArchivo, char
     puts("Proceso de codificacion");
 	contenidoCodificado = generarCodificacoDelContenido(arregloDeCaracteres, numDeCaracteres, elementosDelArchivo,
                                                         numDeElementos,&tamContenidoCodificado);
-    tablaDeEquivalencias(frecuencia,arregloDeCaracteres, numDeCaracteres, &numCadenaDeTabla,
+    tablaDeEquivalencias(frecuencia,arregloDeCaracteres, numDeCaracteres,
                                                      nombreArchivo, extension);
-    printf("contenidoCodificado: %s, %d\n",contenidoCodificado, tamContenidoCodificado);
+    //printf("contenidoCodificado: %s, %d\n",contenidoCodificado, tamContenidoCodificado);
     fclose(fuente);
 //    escribirArchivoNormal(frecuencia, cadenaDeTabla, numCadenaDeTabla);
 	fclose(frecuencia);
@@ -450,7 +477,6 @@ void codificacionHuffman(char * rutaSinNombreArchivo, char * nombreArchivo, char
     free(rutaFrecuencia);
     free(elementosDelArchivo);
     free(contenidoCodificado);
-    free(cadenaDeTabla);
     free(cadenaDeBits);
 }
 
