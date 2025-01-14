@@ -367,7 +367,8 @@ void tablaDeEquivalencias(FILE * frecuencia,Caracter *tablaDeEquivalencias, int 
         fprintf(frecuencia, "%d\t", tablaDeEquivalencias[i]->elem);
         for(j = 0; j < tablaDeEquivalencias[i]->tamCadena; j++)
             fprintf(frecuencia, "%c", tablaDeEquivalencias[i]->cadenaDeBits[j]);
-        fprintf(frecuencia, "\n");
+        if(i != tamTabla-1)
+            fprintf(frecuencia, "\n");
     }
 }
 
