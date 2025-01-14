@@ -18,7 +18,7 @@ int main()
 		exit(0);
 	}
 	if (comprobarCadena(extension,(int)strlen(extension),".dat"))
-    printf("\nExtension .dat\n");
+		decodificacionHuffman()
 	else
 		codificacionHuffman(rutaSinNombreArchivo, nombreArchivo, extension);
 

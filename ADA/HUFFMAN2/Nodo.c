@@ -19,7 +19,6 @@ int crearNodoPadre(Nodo *node)
 {
     *node = (Nodo)calloc(1, sizeof(t_nodo));
     crearCaracter(&((*node)->elemento));
-    (*node)->elemento->elem = '\0';
     (*node)->elemento->frecuencia = 0;
     (*node)->esPadre = 1;
 
@@ -31,7 +30,6 @@ int crearNodoPadre(Nodo *node)
 int crearCaracter(Caracter *character)
 {
     *character = (Caracter)malloc(sizeof(t_caracter));
-    (*character)->elem = '\0';
     (*character)->frecuencia = 0;
     (*character)->cadenaDeBits = NULL;
     (*character)->tamCadena = 0;
@@ -99,7 +97,7 @@ void imprimirCaracter(Caracter character)
     if(character == NULL)
         puts("Caracter: Nulo");
     else
-        printf("caracter: %c\nfrecuencia: %d\ncadena de bits: %s\nnumero de bits: %d\n",
+        printf("caracter: %d\nfrecuencia: %d\ncadena de bits: %s\nnumero de bits: %d\n",
          character->elem, character->frecuencia, character->cadenaDeBits, character->tamCadena);
 }
 

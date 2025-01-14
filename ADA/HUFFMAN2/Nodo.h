@@ -3,7 +3,7 @@
 
 typedef struct caracter
 {
-    unsigned char elem;
+    int elem;
     int frecuencia;
     unsigned char  *cadenaDeBits;
     int tamCadena;

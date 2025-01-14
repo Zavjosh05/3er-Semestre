@@ -33,19 +33,23 @@ unsigned char * obtenerElementosDeArchivo(FILE *archivo, int *numeroDeElementos)
     return elem;
 }
 
-unsigned char * obtenerElementosDeArchivoBin(FILE *archivo, int *numeroDeElementos)
+int * obtenerElementosDeArchivoBin(FILE *archivo, int *numeroDeElementos)
 {
-    unsigned char *elem = NULL;
+    int *elem = NULL, i;
 
     *numeroDeElementos = numeroDeElementosEnArchivo(archivo);
 
-    elem = (unsigned char*)malloc(sizeof(unsigned char)*(*numeroDeElementos+1));
+    elem = (int*)malloc(sizeof(int)*(*numeroDeElementos+1));
     if(elem == NULL)
         return NULL;
     rewind(archivo);
-    fread(elem, sizeof(unsigned char), *numeroDeElementos, archivo);
-    //fgets(elem, *numeroDeElementos, archivo);
-    elem[*numeroDeElementos] = '\0';
+    for(i = 0; i < *numeroDeElementos; i++)
+        elem[i] = (int)fgetc(archivo);
+
+//    printf("impresion de cadena: %d\n",*numeroDeElementos);
+//    for(i = 0; i < *numeroDeElementos; i++)
+//        printf("%d ", elem[i]);
+//    printf("\n");
 
     return elem;
 }
@@ -57,6 +61,7 @@ int escribirArchivoNormal(FILE *archivoDestino, unsigned char *cadena, int tamCa
 
 	int i;
 
+    rewind(archivoDestino);
     for(i = 0; i < tamCadena; i++)
 		fputc(cadena[i], archivoDestino);
 
