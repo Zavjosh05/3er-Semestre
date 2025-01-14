@@ -352,6 +352,7 @@ unsigned char* contenidoCodificadoABits(unsigned char * contenidoCodificado, int
             cuenta = 7;
         }
     }
+    printf("sijalo\n");
 
     return contenidoBinario;
 }
@@ -456,16 +457,16 @@ void codificacionHuffman(char * rutaSinNombreArchivo, char * nombreArchivo, char
     fclose(fuente);
     puts("generarTablaDeEquivalencias");
     arregloDeCaracteres = generarTablaDeEquivalencias(elementosDelArchivo, numDeElementos, &numDeCaracteres);
-//    puts("impresion");
     //imprimirArregloDeCaracter(arregloDeCaracteres, numDeCaracteres);
-    puts("Proceso de codificacion");
+    puts("Codificacion");
 	contenidoCodificado = generarCodificacoDelContenido(arregloDeCaracteres, numDeCaracteres, elementosDelArchivo,
                                                         numDeElementos,&tamContenidoCodificado);
+    //printf("contenidoCodificado: %s, %d\n",contenidoCodificado, tamContenidoCodificado);
+    printf("\nTabla de frecuencias\n");
     tablaDeEquivalencias(frecuencia,arregloDeCaracteres, numDeCaracteres,
                                                      nombreArchivo, extension);
-    //printf("contenidoCodificado: %s, %d\n",contenidoCodificado, tamContenidoCodificado);
+    printf("Termino la tabla de frecuencias\n");
     fclose(fuente);
-//    escribirArchivoNormal(frecuencia, cadenaDeTabla, numCadenaDeTabla);
 	fclose(frecuencia);
     cadenaDeBits = contenidoCodificadoABits(contenidoCodificado, tamContenidoCodificado, &numCadenaDeBits);
 //    printf("numCadenaDeBits: %d\n", numCadenaDeBits);
