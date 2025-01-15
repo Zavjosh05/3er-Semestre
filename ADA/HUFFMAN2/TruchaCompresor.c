@@ -20,13 +20,19 @@ int main()
 		printf("Fin del programa papus\n");
 		exit(0);
 	}
-	inicio = clock();
 	if (comprobarCadena(extension,(int)strlen(extension),".dat"))
+	{
+		inicio = clock();
 		descomprimir(rutaSinNombreArchivo, nombreArchivo, extension);
+		fin = clock();
+	}
 	else
+	{
+		inicio = clock();
 		codificacionHuffman(rutaSinNombreArchivo, nombreArchivo, extension);
+		fin = clock();
+	}
 
-	fin = clock();
 	printf("Tiempo de ejecucion: %.3f\n",(double)(fin-inicio)/CLOCKS_PER_SEC);
 
   free(rutaSinNombreArchivo);
