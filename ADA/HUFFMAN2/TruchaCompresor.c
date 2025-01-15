@@ -2,13 +2,14 @@
 #include <commdlg.h>
 #include <stdio.h>
 #include "huffman.h"
-#include "Descomprimir.h"
+#include <time.h>
 
 int obtenerRuta(char ** rutaSinNombreArchivo, char ** nombreArchivo, char ** extension);
 int comprobarCadena(char * arrayCaracteresArchivo, int numCaracteresArchivo, char * palabraABuscar);
 
 int main()
 {
+	clock_t inicio, fin;
 	char * rutaSinNombreArchivo = NULL;
 	char * nombreArchivo = NULL;
 	char * extension = NULL;
@@ -18,10 +19,14 @@ int main()
 		printf("Fin del programa papus\n");
 		exit(0);
 	}
+	inicio = clock();
 	if (comprobarCadena(extension,(int)strlen(extension),".dat"))
-		descomprimir(rutaSinNombreArchivo, nombreArchivo, extension);
+		decodificacionHuffman(rutaSinNombreArchivo, nombreArchivo, extension);
 	else
 		codificacionHuffman(rutaSinNombreArchivo, nombreArchivo, extension);
+
+	fin = clock();
+	printf("Tiempo de ejecucion: %.3f\n",(double)(fin-inicio)/CLOCKS_PER_SEC);
 
   free(rutaSinNombreArchivo);
   free(nombreArchivo);
