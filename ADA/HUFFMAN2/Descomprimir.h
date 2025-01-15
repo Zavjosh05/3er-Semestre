@@ -1,5 +1,6 @@
 #pragma once
 #include "Nodo.h"
+#include "stdio.h"
 
 #ifndef Descomprimir
 #define Descomprimir
@@ -19,6 +20,17 @@ void descomprimir(char * rutaArchivo, char * nombreArchivo, char * extension);
 int comprobarCadenaEsta(unsigned char * arrayCaracteresArchivo, int numCaracteresArchivo, char * palabraABuscar, int * numAEmpezar);
 
 /**
+* Comprueba si la cadena palabraBuscar está en la cadena arrayCaracteresArchivo
+*
+* @param arrayCaracteresArchivo Cadena donde se busca
+* @param numCaracteresArchivo Tamaño de la de cadena donde se busca
+* @param palabraABuscar Palabra donde que se busca
+* @param numAEmpezar Posición de la lista donde se quiere empezar a buscar
+* @return se enviara 1 o 0 dependiendo si la cadena está en la cadena a buscar
+*/
+int comprobarCadenaEstaSigned(char * arrayCaracteresArchivo, int numCaracteresArchivo, char * palabraABuscar, int * numAEmpezar);
+
+/**
  * Nos proporcionara una cadena que esté antes de un salto de linea, esta función para cuando detecta un saldo de linea
  * @param arrayCaracteresArchivo Cadena donde se busca la cadena antes del salto de linea
  * @param numCaracteresArchivo Tamaño de la cadena donde se busca
@@ -26,6 +38,12 @@ int comprobarCadenaEsta(unsigned char * arrayCaracteresArchivo, int numCaractere
  * @return Se regresara la cadena que hay antes de cada salto de linea
  */
 char * cadenaAntesDeUnSaltoDeLinea(unsigned char * arrayCaracteresArchivo, int numCaracteresArchivo, int * numAEmpezar);
+
+char * fcadenaAntesDeUnSaltoDeLinea(FILE * archivo, int numCaracteresArchivo);
+
+unsigned char * fcadenaAntesDeUnSaltoDeLineaUnsigned(FILE * archivo);
+
+void NuevoAddAArrayCaracteres(Caracter * arrayAAgregar, int caracter, unsigned char * cadenaEquivalenteBits, int * tamArrayAAgregar);
 
 /**
  * Nos proporcionara una cadena que esté antes de un salto de linea, esta función para cuando detecta un saldo de linea
@@ -53,7 +71,7 @@ void addACadena(char ** arrayAAgregar, char charAAgregar, int * tamArreglo);
  * @param charAAgregar	Es el caracter a agregar
  * @param tamArreglo		Es el tamaño actual del arreglo
  */
-void addACadenaUnsigned(unsigned char ** arrayAAgregar, char charAAgregar, int * tamArreglo);
+void addACadenaUnsigned(unsigned char ** arrayAAgregar, unsigned char charAAgregar, int * tamArreglo);
 
 /**
  * Aquí se llena el array de caracteres, con su respectiva información
@@ -84,5 +102,15 @@ int buscarFinTablaEquivalencias(unsigned char * arrayCaracteresArchivo, int numC
  * @param cadenaEquivalenteBits Es la cadena equivalente en bits relacionada con el caracter recibido
  * @param tamArrayAAgregar Es el tamaño del arreglo que se está generando
  */
-void addAArrayCaracteres(Caracter * arrayAAgregar, unsigned caracter, unsigned char * cadenaEquivalenteBits, int * tamArrayAAgregar);
+void addAArrayCaracteres(Caracter * arrayAAgregar, int caracter, unsigned char * cadenaEquivalenteBits, int * tamArrayAAgregar);
+
+void hacerCopiaArray (unsigned char ** destino,unsigned char * origen);
+
+void nuevoLlenarArrayCaracteres(Caracter ** arrayCaracteres, FILE * archivoTablaFrecuencias, int * tamArrayCaracteres);
+
+void crearArchivo(Caracter * arrayCaracteres, int tamArrayCaracteres, unsigned char * arrayBitsEnArchivoComprimido, int tamArrayBitsEnArchivoComprimido, FILE * archivoDescomprimido);
+
+int tamArrayCharUnsigned(unsigned char * char1);
+int cadenaDeBitsIguales(unsigned char * cadenaDeBitsRecibida, Caracter * arrayCaracteres, int tamArrayCaracteres, int * bitCoincidencia);
+
 #endif //Descomprimir

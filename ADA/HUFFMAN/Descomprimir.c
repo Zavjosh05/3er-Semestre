@@ -1,10 +1,11 @@
-#include "Descomprimir.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "archivo.h"
 #include <string.h>
 #include "Nodo.h"
+#include "archivo.h"
 #include "huffman.h"
+#include "Descomprimir.h"
 
 void descomprimir(char * rutaArchivo, char * nombreArchivo, char * extension)
 {
@@ -28,20 +29,43 @@ void descomprimir(char * rutaArchivo, char * nombreArchivo, char * extension)
 
   Caracter * arrayCaracteres = NULL;
 
-  arrayCaracteresArchivoFrecuencias = obtenerElementosDeArchivo(archivoTablaFrecuencias, &numCaracteresArchivoFrecuencias);
+  //arrayCaracteresArchivoFrecuencias = obtenerElementosDeArchivo(archivoTablaFrecuencias, &numCaracteresArchivoFrecuencias);
 
-  printf("\n%s\n", arrayCaracteresArchivoFrecuencias);
+  //printf("\n%s\n", arrayCaracteresArchivoFrecuencias);
 
-  if(!comprobarCadenaEsta(arrayCaracteresArchivoFrecuencias, numCaracteresArchivoFrecuencias, "INICIO", &posicionActual))
+  //nombreDelArchivoDescomprimido = cadenaAntesDeUnSaltoDeLinea(arrayCaracteresArchivoFrecuencias, numCaracteresArchivoFrecuencias, &posicionActual);
+
+
+  int tamArchivoTablaFrecuencias = numeroDeElementosEnArchivo(archivoTablaFrecuencias);
+  rewind(archivoTablaFrecuencias);
+
+  printf("\nHola\n");
+  nombreDelArchivoDescomprimido = fcadenaAntesDeUnSaltoDeLinea(archivoTablaFrecuencias, tamArchivoTablaFrecuencias);
+  if (nombreDelArchivoDescomprimido == NULL)
+    exit(-1);
+
+  if(!comprobarCadenaEstaSigned(nombreDelArchivoDescomprimido, numCaracteresArchivoFrecuencias, ".txt", &posicionActual))
   {
-    printf("\aEl .txt relacionado con este archivo comprimido no es el generado por TRUCHA CORPORATION\n");
+    printf("\aEl %sf.txt relacionado con este archivo comprimido no es el generado por TRUCHA CORPORATION\n", nombreArchivo);
     exit(-1);
   }
-  printf("\nola kikin\n");
+  unsigned char * cadenaBit;
+  for(;fgetc(archivoTablaFrecuencias) != EOF;)
+  {
+    fseek(archivoTablaFrecuencias, -1, SEEK_CUR);
+    int caracAux = 0;
+    cadenaBit = NULL;
+    unsigned char caracterAGuardar;
 
-  nombreDelArchivoDescomprimido = cadenaAntesDeUnSaltoDeLinea(arrayCaracteresArchivoFrecuencias, numCaracteresArchivoFrecuencias, &posicionActual);
+    if(fscanf(archivoTablaFrecuencias, "%d\t", &caracAux))
+      exit(-1);
 
-  printf("\n%s\n", nombreDelArchivoDescomprimido);
+    caracterAGuardar = (unsigned char) caracAux;
+
+    cadenaBit = fcadenaAntesDeUnSaltoDeLineaUnsigned(archivoTablaFrecuencias, tamArchivoTablaFrecuencias);
+
+    addAArrayCaracteres(arrayCaracteres, caracterAGuardar, cadenaBit, &tamArrayCaracteres);
+  }
 
   fclose(archivoTablaFrecuencias);
   free(rutaTablaDeFrecuencias);
@@ -49,6 +73,7 @@ void descomprimir(char * rutaArchivo, char * nombreArchivo, char * extension)
   free(nombreDelArchivoDescomprimido);
   free(extensionDescomprimido);
   free(arrayCaracteres);
+  free(cadenaBit);
   /*
 
   llenarArrayCaracteres(arrayCaracteresArchivoFrecuencias, numCaracteresArchivoFrecuencias, &posicionActual, &arrayCaracteres, &tamArrayCaracteres);
@@ -94,6 +119,19 @@ int comprobarCadenaEsta(unsigned char * arrayCaracteresArchivo, int numCaractere
   return 0;
 }
 
+int comprobarCadenaEstaSigned(char * arrayCaracteresArchivo, int numCaracteresArchivo, char * palabraABuscar, int * numAEmpezar)
+{
+  int contador = 0;
+  for(; ((*numAEmpezar) < numCaracteresArchivo) && (palabraABuscar[(*numAEmpezar)] != '\0'); (*numAEmpezar)++)
+  {
+    if(arrayCaracteresArchivo[(*numAEmpezar)] == palabraABuscar[(*numAEmpezar)])
+      contador++;
+  }
+  if(contador == strlen(palabraABuscar))
+    return 1;
+  return 0;
+}
+
 char * cadenaAntesDeUnSaltoDeLinea(unsigned char * arrayCaracteresArchivo, int numCaracteresArchivo, int * numAEmpezar)
 {
   printf("\nIniciando cadenaAntesDeUnSaltoDeLinea con numAEmpezar de: %d\tcon numero caracteres archivo: %d\n", *numAEmpezar, numCaracteresArchivo);
@@ -106,6 +144,36 @@ char * cadenaAntesDeUnSaltoDeLinea(unsigned char * arrayCaracteresArchivo, int n
   }
   cadenaCreada[(*numAEmpezar)] = '\0';
   (*numAEmpezar)++;
+  printf("\nLa cadena es: %s\n", cadenaCreada);
+  return cadenaCreada;
+}
+
+char * fcadenaAntesDeUnSaltoDeLinea(FILE * archivo, int numCaracteresArchivo)
+{
+  char * cadenaCreada = NULL;
+  int tamCadenaCreada = 0, i = 0;
+  char temp = fgetc(archivo);
+  for(i = 0; i < numCaracteresArchivo && (temp != '\n'); i++)
+  {
+    addACadena(&cadenaCreada, temp, &tamCadenaCreada);
+    temp = fgetc(archivo);
+  }
+  cadenaCreada[tamCadenaCreada] = '\0';
+  printf("\nLa cadena es: %s\n", cadenaCreada);
+  return cadenaCreada;
+}
+
+unsigned char * fcadenaAntesDeUnSaltoDeLineaUnsigned(FILE * archivo, int numCaracteresArchivo)
+{
+  unsigned char * cadenaCreada = NULL;
+  int tamCadenaCreada = 0, i = 0;
+  unsigned char temp = fgetc(archivo);
+  for(i = 0; i < numCaracteresArchivo && (temp != '\n'); i++)
+  {
+    temp = fgetc(archivo);
+    addACadenaUnsigned(&cadenaCreada, temp, &tamCadenaCreada);
+  }
+  cadenaCreada[tamCadenaCreada] = '\0';
   printf("\nLa cadena es: %s\n", cadenaCreada);
   return cadenaCreada;
 }
@@ -145,7 +213,7 @@ void addACadena(char ** arrayAAgregar, char charAAgregar, int * tamArreglo)
   }
 }
 
-void addACadenaUnsigned(unsigned char ** arrayAAgregar, char charAAgregar, int * tamArreglo)
+void addACadenaUnsigned(unsigned char ** arrayAAgregar, unsigned char charAAgregar, int * tamArreglo)
 {
   if(*tamArreglo == 0)
   {
@@ -194,7 +262,7 @@ int buscarFinTablaEquivalencias(unsigned char * arrayCaracteresArchivo, int numC
   return 0;
 }
 
-void addAArrayCaracteres(Caracter * arrayAAgregar, unsigned caracter, unsigned char * cadenaEquivalenteBits, int * tamArrayAAgregar)
+void addAArrayCaracteres(Caracter * arrayAAgregar, unsigned char caracter, unsigned char * cadenaEquivalenteBits, int * tamArrayAAgregar)
 {
   if((*tamArrayAAgregar) == 0)
   {
