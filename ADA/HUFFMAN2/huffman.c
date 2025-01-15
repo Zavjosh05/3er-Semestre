@@ -152,8 +152,6 @@ Nodo* caracteresANodos(Caracter *arreglo, int tArr)
         temp = NULL;
     }
 
-    printf("imprimiendo arreglo de nodos dentro de f, numElem: %d\n",tArr);
-	//imprimirArregloDeNodo(arregloNodo,tArr);
     return arregloNodo;
 }
 
@@ -257,21 +255,14 @@ Caracter* generarTablaDeEquivalencias(int *elementosDelArchivo, int numeroDeElem
     (*arregloDeBits) = (unsigned char*)malloc(sizeof(unsigned char));
     if(*arregloDeBits == NULL) exit(-1);
 
-    puts("arregloDeCaracterUni");
     arregloCaracter= arregloDeCaractersUnicos(elementosDelArchivo,numeroDeElementos,&tArr);
     ordenarArregloDeCaracteresAsc(arregloCaracter,tArr);
-    puts("arbol");
-    printf("\ntArr2 = %d\n",tArr);
     arbol = generarArbolDeNodos(arregloCaracter,tArr);
-    puts("AsignarCadenasDeBits");
-    //imprimirArregloDeCaracter(arregloCaracter,tArr);
-    printf("arr1: %p\n",arregloCaracter);
 	asignarCadenasDeBits(arbol, arregloCaracter,tArr,arregloDeBits,0);
 	free(*arregloDeBits);
     free(arregloDeBits);
     ordenarArregloDeCaracteresDsc(arregloCaracter,tArr);
     *numeroDeCaracteres = tArr;
-    puts("si acabo GenerarTablaEquivalencias");
 
     return arregloCaracter;
 
@@ -452,28 +443,18 @@ void codificacionHuffman(char * rutaSinNombreArchivo, char * nombreArchivo, char
     frecuencia = fopen(rutaFrecuencia, "w+");
     if(frecuencia == NULL) exit(-1);
 
-    puts("obtenerelementosArchivo");
     elementosDelArchivo = obtenerElementosDeArchivoBin(fuente,&numDeElementos);
     fclose(fuente);
-    puts("generarTablaDeEquivalencias");
     arregloDeCaracteres = generarTablaDeEquivalencias(elementosDelArchivo, numDeElementos, &numDeCaracteres);
-    //imprimirArregloDeCaracter(arregloDeCaracteres, numDeCaracteres);
-    puts("Codificacion");
 	contenidoCodificado = generarCodificacoDelContenido(arregloDeCaracteres, numDeCaracteres, elementosDelArchivo,
                                                         numDeElementos,&tamContenidoCodificado);
-    //printf("contenidoCodificado: %s, %d\n",contenidoCodificado, tamContenidoCodificado);
-    printf("\nTabla de frecuencias\n");
     tablaDeEquivalencias(frecuencia,arregloDeCaracteres, numDeCaracteres,
                                                      nombreArchivo, extension);
-    printf("Termino la tabla de frecuencias\n");
     fclose(fuente);
 	fclose(frecuencia);
     cadenaDeBits = contenidoCodificadoABits(contenidoCodificado, tamContenidoCodificado, &numCadenaDeBits);
-//    printf("numCadenaDeBits: %d\n", numCadenaDeBits);
-//    for(int i = 0; i < numCadenaDeBits; i++)
-//      	printf("%d ",cadenaDeBits[i]);
-
     escribirArchivoBinario(destino, cadenaDeBits, numCadenaDeBits);
+
     free(rutaFuente);
     free(rutaDestino);
     free(rutaFrecuencia);
