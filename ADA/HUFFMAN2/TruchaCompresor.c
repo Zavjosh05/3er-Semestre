@@ -2,6 +2,7 @@
 #include <commdlg.h>
 #include <stdio.h>
 #include "huffman.h"
+#include "Descomprimir.h"
 #include <time.h>
 
 int obtenerRuta(char ** rutaSinNombreArchivo, char ** nombreArchivo, char ** extension);
@@ -21,7 +22,7 @@ int main()
 	}
 	inicio = clock();
 	if (comprobarCadena(extension,(int)strlen(extension),".dat"))
-		decodificacionHuffman(rutaSinNombreArchivo, nombreArchivo, extension);
+		descomprimir(rutaSinNombreArchivo, nombreArchivo, extension);
 	else
 		codificacionHuffman(rutaSinNombreArchivo, nombreArchivo, extension);
 

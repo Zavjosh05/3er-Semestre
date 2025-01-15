@@ -7,7 +7,6 @@
 #include "huffman.h"
 #include "unistd.h"
 #include "direct.h"
-#include ""
 
 void descomprimir(char * rutaArchivo, char * nombreArchivo, char * extension)
 {
@@ -37,7 +36,7 @@ void descomprimir(char * rutaArchivo, char * nombreArchivo, char * extension)
   if (nombreDelArchivoDescomprimido == NULL)
     exit(-1);
 
-  if(!comprobarCadenaEstaSigned(nombreDelArchivoDescomprimido, strlen(nombreDelArchivoDescomprimido), ".txt", &posicionActual))
+  if(!comprobarCadenaEstaSigned(nombreDelArchivoDescomprimido, strlen(nombreDelArchivoDescomprimido), ".", &posicionActual))
   {
     printf("\aEl %sf.txt relacionado con este archivo comprimido no es el generado por TRUCHA CORPORATION\n", nombreArchivo);
     exit(-1);
