@@ -154,7 +154,7 @@ void nuevoLlenarArrayCaracteres(Caracter ** arrayCaracteres, FILE * archivoTabla
       (*arrayCaracteres)[0]->elem = caracter;
       (*arrayCaracteres)[0]->frecuencia = 0;
       hacerCopiaArray(&((*arrayCaracteres)[0]->cadenaDeBits), cadenaBits);
-      (*arrayCaracteres)[0]->tamCadena = sizeof(cadenaBits);
+      (*arrayCaracteres)[0]->tamCadena = tamArrayCharUnsigned((*arrayCaracteres)[0]->cadenaDeBits);
       (*tamArrayCaracteres)++;
     }
     else
@@ -170,8 +170,9 @@ void nuevoLlenarArrayCaracteres(Caracter ** arrayCaracteres, FILE * archivoTabla
       caracAux->elem = caracter;
       caracAux->frecuencia = 0;
       hacerCopiaArray(&(caracAux->cadenaDeBits), cadenaBits);
-      caracAux->tamCadena = sizeof(cadenaBits);
+      caracAux->tamCadena = tamArrayCharUnsigned(caracAux->cadenaDeBits);
       (*arrayCaracteres)[indiceActual] = caracAux;
+
     }
   }
 }
@@ -196,10 +197,8 @@ void crearArchivo(Caracter * arrayCaracteres, int tamArrayCaracteres, unsigned c
 		addACadenaUnsigned(&c, '1', &tamc);
       else
         addACadenaUnsigned(&c, '0', &tamc);
-      printf("\nHola demonio\n");
       if(cadenaDeBitsIguales(c, arrayCaracteres, tamArrayCaracteres,&elemSeleccionado))
       {
-        printf("\nSegún mi mamá, aquí tambien trueno, mira mi elemento seleccionado %c\n", (unsigned char) elemSeleccionado);
         fputc((unsigned char)elemSeleccionado, archivoDescomprimido);
         tamc = 0;
         free(c);
@@ -250,7 +249,6 @@ char * cadenaAntesDeUnSaltoDeLinea(unsigned char * arrayCaracteresArchivo, int n
   for(; ((*numAEmpezar) < numCaracteresArchivo) && (arrayCaracteresArchivo[(*numAEmpezar)] != '\n'); (*numAEmpezar)++)
   {
     addACadena(&cadenaCreada, arrayCaracteresArchivo[(*numAEmpezar)], &tamCadenaCreada);
-    printf("%s ", cadenaCreada);
   }
   cadenaCreada[(*numAEmpezar)] = '\0';
   (*numAEmpezar)++;
@@ -273,16 +271,13 @@ char * fcadenaAntesDeUnSaltoDeLinea(FILE * archivo, int numCaracteresArchivo)
 
 unsigned char * fcadenaAntesDeUnSaltoDeLineaUnsigned(FILE * archivo)
 {
-  printf("\nToy entrando a fcadenaAntesDeUnSaltoDeLineaUnsigned\n");
   unsigned char * cadenaCreada = NULL;
   int tamCadenaCreada = 0, i = 0;
   char temp = fgetc(archivo);
   while(temp != '\n' && temp != EOF)
   {
-  	printf("\nHola, el char que esta entrando es: %c, con un tam de: %d\n", temp, tamCadenaCreada);
     addACadenaUnsigned(&cadenaCreada, (unsigned char) temp, &tamCadenaCreada);
     temp = fgetc(archivo);
-  	printf("\nHola, el char que esta saliendo es: %c, con un tam de: %d\n", temp, tamCadenaCreada);
   }
   if(cadenaCreada == NULL)
     exit(-1);
@@ -346,19 +341,14 @@ void addACadenaUnsigned(unsigned char ** arrayAAgregar, unsigned char charAAgreg
 
 void llenarArrayCaracteres(unsigned char * arrayCaracteresArchivo, int numCaracteresArchivo, int * numAEmpezar, Caracter ** arrayCaracteres, int * tamArrayCaracteres)
 {
-  printf("\nIniciando llenarArrayCaracteres con numero a empezar de: %d\n", *numAEmpezar);
 
   for(; *(numAEmpezar) < numCaracteresArchivo && !buscarFinTablaEquivalencias(arrayCaracteresArchivo, numCaracteresArchivo, numAEmpezar); (*numAEmpezar)++)
   {
-    printf("Caracter cargado %c\n", arrayCaracteresArchivo[(*numAEmpezar)]);
+
     unsigned char caracterAGuardar = arrayCaracteresArchivo[(*numAEmpezar)];
-    printf("Caracter a guardar%c\n", caracterAGuardar);
     (*numAEmpezar)++;
-    printf("Enviamos");
     unsigned char * cadenaDeBits = cadenaAntesDeUnSaltoDeLineaUnsigned(arrayCaracteresArchivo, numCaracteresArchivo, numAEmpezar);
-    printf("%s", cadenaDeBits);
     addAArrayCaracteres((*arrayCaracteres), caracterAGuardar, cadenaDeBits, tamArrayCaracteres);
-    printf("%s", (*arrayCaracteres)[(*numAEmpezar)]->cadenaDeBits);
   }
 }
 
@@ -425,11 +415,14 @@ int tamArrayCharUnsigned(unsigned char * char1)
 
 int cadenaDeBitsIguales(unsigned char * cadenaDeBitsRecibida, Caracter * arrayCaracteres, int tamArrayCaracteres, int * bitCoincidencia)
 {
-  printf("\nHola perro ando buscando a %s\n", cadenaDeBitsRecibida);
+  int tamCadenaBit = strlen((char *)cadenaDeBitsRecibida);
   for(int i = 0; i < tamArrayCaracteres; i++)
   {
-    printf("%d ", i);
     int y = 0;
+
+	int z = arrayCaracteres[i]->tamCadena;
+    if (z != tamCadenaBit)
+      continue;
     for(int j = 0; (cadenaDeBitsRecibida[j] != '\0') && (arrayCaracteres[i]->cadenaDeBits[j] != '\0'); j++)
     {
       if(cadenaDeBitsRecibida[j] == arrayCaracteres[i]->cadenaDeBits[j])
@@ -443,6 +436,5 @@ int cadenaDeBitsIguales(unsigned char * cadenaDeBitsRecibida, Caracter * arrayCa
       return 1;
     }
   }
-  printf("\nadios perro\n");
   return 0;
 }
